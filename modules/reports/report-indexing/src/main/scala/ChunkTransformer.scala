@@ -1,5 +1,7 @@
 package es.eriktorr
 
+import TextSegmentExtensions.put
+
 import dev.langchain4j.data.document.Document
 import dev.langchain4j.data.segment.{TextSegment, TextSegmentTransformer}
 
@@ -15,11 +17,8 @@ final class ChunkTransformer(document: Document, indexName: String) extends Text
     else None
 
   override def transform(textSegment: TextSegment): TextSegment =
-    textSegment.metadata().put(ReportMetadata.IndexName.name, indexName)
-    documentFilename.foreach: filename =>
-      textSegment.metadata().put(ReportMetadata.Filename.name, filename)
-    documentSummary.foreach: summary =>
-      textSegment.metadata().put(ReportMetadata.Summary.name, summary)
-    documentTitle.foreach: title =>
-      textSegment.metadata().put(ReportMetadata.Title.name, title)
     textSegment
+      .put(ReportMetadata.IndexName, Some(indexName))
+      .put(ReportMetadata.Filename, documentFilename)
+      .put(ReportMetadata.Summary, documentSummary)
+      .put(ReportMetadata.Title, documentTitle)

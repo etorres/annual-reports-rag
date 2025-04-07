@@ -9,13 +9,13 @@ object Main extends StrictLogging:
     // preload model
     val ollamaConfig = OllamaConfig.localContainerFor(OllamaModel.Gemma3, 1)
     OllamaApiClient.preload(ollamaConfig)
-    // vector database
-    val elasticConfig = ElasticConfig.localContainer
+    // init vector databases
+    val elasticConfig = ElasticConfig.localContainerFor("embeddings")
     val summaryVectorStore = VectorStore.impl(elasticConfig, "summary")
-    val vectorStoreBuilder = VectorStoreBuilder(elasticConfig, "embeddings")
-    // load reports
+    val vectorStoreBuilder = VectorStoreBuilder(elasticConfig)
+    // load reports from path
     val reportPath = os.pwd / "modules" / "reports"
-    val samplesPath = reportPath / "sample-reports" / "src" / "main" / "resources" / "one"
+    val samplesPath = reportPath / "sample-reports" / "src" / "main" / "resources" / "simple"
     ReportLoader(ollamaConfig, summaryVectorStore, vectorStoreBuilder).allReportsFrom(
       samplesPath,
     )
@@ -23,7 +23,7 @@ object Main extends StrictLogging:
     val vectorStoreRouter = VectorStoreRouter.impl(
       elasticConfig,
       "summary",
-      ReportMetadata.Summary.name,
+      ReportMetadata.IndexName.name,
     )
     vectorStoreRouter.refreshIndex()
     val response = vectorStoreRouter.indexNameFor(

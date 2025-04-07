@@ -13,10 +13,11 @@ trait VectorStoreRouter extends ElasticVectorStore:
 object VectorStoreRouter extends LazyLogging:
   def impl(
       elasticConfig: ElasticConfig,
-      indexName: String,
+      index: String,
       key: String,
   ): VectorStoreRouter =
     new VectorStoreRouter:
+      private val indexName = elasticConfig.indexNameFrom(index)
       override def indexNameFor(question: String): Option[String] =
         Using(RestClient.builder(elasticConfig.httpHost).build()): restClient =>
           val queryEmbedding = embeddingModel.embed(question).content()
@@ -28,12 +29,7 @@ object VectorStoreRouter extends LazyLogging:
           val embeddingStore = embeddingStoreFrom(restClient, indexName)
           val relevant = embeddingStore.search(request)
           val embeddingMatch = relevant.matches().get(0)
-          println( // TODO
-            s" >> INDEX_NAME: Score ${embeddingMatch.score()} with content: ${embeddingMatch.embedded().text()}",
-          )
-          logger.info(
-            s"Score ${embeddingMatch.score()} with content: ${embeddingMatch.embedded().text()}",
-          )
+          logger.info(s"${embeddingMatch.embeddingId()} scores ${embeddingMatch.score()}")
           val metadata = embeddingMatch.embedded().metadata()
           if metadata.containsKey(key) then Some(metadata.getString(key)) else None
         .get
@@ -45,5 +41,4 @@ object VectorStoreRouter extends LazyLogging:
             statusCode == 200,
             s"Server status code is $statusCode when trying to refresh the index",
           )
-          println(s" >> REFRESH_INDEX") // TODO
         .get

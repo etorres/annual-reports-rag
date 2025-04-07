@@ -1,5 +1,6 @@
 package es.eriktorr
 
+import DocumentExtensions.*
 import LangChain4jUtils.variablesFrom
 
 import com.typesafe.scalalogging.StrictLogging
@@ -22,16 +23,20 @@ final class ReportTransformer(chatModel: ChatLanguageModel)
   )
 
   override def transform(document: Document): Document =
-    val filename = document.metadata().getString(ReportMetadata.Filename.name)
-    // summarizing the document
+    val filename = document.metadataAsString(ReportMetadata.Filename)
+    document
+      .put(ReportMetadata.IndexName, indexNameFrom(filename))
+      .put(ReportMetadata.Summary, summaryFrom(document, filename))
+
+  private def indexNameFrom(filename: String) = filename.replaceAll("(?<!^)[.].*", "")
+
+  private def summaryFrom(document: Document, filename: String) =
     logger.info(s"Summarizing: $filename, it would take several minutes...")
     val summary = chatModel.chat(
       promptTemplate.apply(variablesFrom("content" -> document.text())).text(),
     )
-    // TODO
-    println(s" >> $filename, summary: \n $summary")
-    // TODO: Clean summary
-    // TODO
-    document.metadata().put(ReportMetadata.Summary.name, summary)
-    logger.info(s"Transformed: $filename")
-    document
+    clean(summary, filename)
+
+  private def clean(summary: String, filename: String) =
+    println(s" >> $filename, summary: \n $summary") // TODO
+    summary // TODO

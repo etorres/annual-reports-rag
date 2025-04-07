@@ -13,8 +13,9 @@ trait VectorStore extends ElasticVectorStore:
   def add(textSegments: List[TextSegment]): Unit
 
 object VectorStore:
-  def impl(elasticConfig: ElasticConfig, indexName: String): VectorStore =
+  def impl(elasticConfig: ElasticConfig, index: String): VectorStore =
     new VectorStore:
+      private val indexName = elasticConfig.indexNameFrom(index)
       override def add(textSegment: TextSegment): Unit =
         Using(RestClient.builder(elasticConfig.httpHost).build()): restClient =>
           val embeddingStore = embeddingStoreFrom(restClient, indexName)
