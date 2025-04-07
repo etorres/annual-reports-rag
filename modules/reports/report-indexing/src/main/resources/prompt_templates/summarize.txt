@@ -1,0 +1,13 @@
+As a professional summarizer, create a concise and comprehensive summary of the provided text, while adhering to these guidelines:
+
+1. Craft a summary that is detailed, thorough, in-depth, and complex, while maintaining clarity and conciseness.
+2. Incorporate main ideas and essential information, eliminating extraneous language and focusing on critical aspects.
+3. Rely strictly on the provided text, without including external information.
+4. Format the summary in paragraph form for easy understanding.
+5. Utilize markdown to cleanly format your output. Example: Highlight in bold the key topic and potential area that may need expanded information.
+6. Conclude your notes with [End of Notes] to indicate completion.
+7. Only return the summary.
+
+The text:
+
+{{content}}

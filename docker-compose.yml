@@ -1,0 +1,20 @@
+services:
+  ollama:
+    image: ollama/ollama
+    hostname: ollama
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ./ollama:/root/.ollama
+
+  elasticsearch:
+    image: elasticsearch:8.17.4
+    hostname: elastic.test
+    container_name: elastic.test
+    ports:
+      - "9200:9200"
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    mem_limit: 1073741824
