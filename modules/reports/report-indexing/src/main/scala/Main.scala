@@ -1,9 +1,7 @@
 package es.eriktorr
 
-import com.typesafe.scalalogging.StrictLogging
-
 // TODO: Gemma3, Mistral, Phi4
-object Main extends StrictLogging:
+object Main:
   @main
   def run(): Unit =
     // preload model

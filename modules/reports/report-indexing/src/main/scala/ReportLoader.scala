@@ -4,20 +4,17 @@ import DocumentExtensions.metadataAsString
 import TextSegmentExtensions.copy
 
 import com.typesafe.scalalogging.StrictLogging
+import dev.langchain4j.data.document.loader.FileSystemDocumentLoader
+import dev.langchain4j.data.document.parser.apache.pdfbox.ApachePdfBoxDocumentParser
+import dev.langchain4j.data.document.splitter.DocumentSplitters
 import dev.langchain4j.data.document.{
   Document,
   DocumentParser,
   DocumentSplitter,
   DocumentTransformer,
 }
-import dev.langchain4j.data.document.loader.FileSystemDocumentLoader
-import dev.langchain4j.data.document.parser.apache.pdfbox.ApachePdfBoxDocumentParser
-import dev.langchain4j.data.document.splitter.DocumentSplitters
 import dev.langchain4j.data.segment.TextSegment
-import dev.langchain4j.model.chat.request.ResponseFormat
-import dev.langchain4j.model.ollama.OllamaChatModel
 
-import java.time.Duration as JDuration
 import java.util.Locale
 import java.util.concurrent.Executors
 import scala.collection.parallel.CollectionConverters.given
@@ -36,7 +33,7 @@ final class ReportLoader(
       val document = loadDocument(
         path,
         ApachePdfBoxDocumentParser(true),
-        ReportTransformer(chatModelFrom(config, verbose)),
+        ReportTransformer.impl(config, verbose),
       )
       storeSummary(document)
       storeContent(document, DocumentSplitters.recursive(300, 0) /* TODO: add tokenizer */ )
@@ -80,22 +77,3 @@ final class ReportLoader(
     val textSegmentTransformer = ChunkTransformer(document, indexName)
     val enrichedTextSegments = textSegments.map(textSegmentTransformer.transform)
     vectorStoreBuilder.impl(indexName).add(enrichedTextSegments)
-
-  private def chatModelFrom(config: OllamaConfig, verbose: Boolean) =
-    val responseFormat = config.model match
-      case OllamaModel.Llama3_2 | OllamaModel.TinyLlama => ResponseFormat.JSON
-      case _ => ResponseFormat.TEXT
-    OllamaChatModel
-      .builder()
-      .baseUrl(config.baseUrl)
-      .logRequests(verbose)
-      .logResponses(verbose)
-      .maxRetries(3)
-      .modelName(config.model.name)
-      .repeatPenalty(0.8d)
-      .responseFormat(responseFormat)
-      .temperature(0.2d)
-      .timeout(JDuration.ofMinutes(10L))
-      .topK(40)
-      .topP(0.9d)
-      .build()

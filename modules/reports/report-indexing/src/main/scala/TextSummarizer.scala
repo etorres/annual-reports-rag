@@ -1,0 +1,53 @@
+package es.eriktorr
+
+import LangChain4jUtils.{pathTo, variablesFrom}
+
+import com.typesafe.scalalogging.StrictLogging
+import dev.langchain4j.data.document.Document
+import dev.langchain4j.data.document.loader.FileSystemDocumentLoader
+import dev.langchain4j.data.document.parser.TextDocumentParser
+import dev.langchain4j.model.chat.request.ResponseFormat
+import dev.langchain4j.model.input.PromptTemplate
+import dev.langchain4j.model.ollama.OllamaChatModel
+
+import java.time.Duration as JDuration
+
+final class TextSummarizer(config: OllamaConfig, verbose: Boolean) extends StrictLogging:
+  def summaryFrom(document: Document, filename: String): String =
+    logger.info(s"Summarizing: $filename, it would take several minutes...")
+    val summary = chatModel.chat(
+      promptTemplate.apply(variablesFrom("content" -> document.text())).text(),
+    )
+    clean(summary, filename)
+
+  private def clean(summary: String, filename: String) =
+    println(s" >> $filename, summary: \n $summary") // TODO
+    summary // TODO
+
+  private lazy val chatModel =
+    val responseFormat = config.model match
+      case OllamaModel.Llama3_2 | OllamaModel.TinyLlama => ResponseFormat.JSON
+      case _ => ResponseFormat.TEXT
+    OllamaChatModel
+      .builder()
+      .baseUrl(config.baseUrl)
+      .logRequests(verbose)
+      .logResponses(verbose)
+      .maxRetries(3)
+      .modelName(config.model.name)
+      .repeatPenalty(0.8d)
+      .responseFormat(responseFormat)
+      .temperature(0.2d)
+      .timeout(JDuration.ofMinutes(10L))
+      .topK(40)
+      .topP(0.9d)
+      .build()
+
+  private lazy val promptTemplate = PromptTemplate.from(
+    FileSystemDocumentLoader
+      .loadDocument(
+        pathTo("prompt_templates/summarize.txt"),
+        TextDocumentParser(),
+      )
+      .text(),
+  )
