@@ -1,4 +1,5 @@
 package es.eriktorr
+package api
 
 import LangChain4jUtils.{pathTo, variablesFrom}
 

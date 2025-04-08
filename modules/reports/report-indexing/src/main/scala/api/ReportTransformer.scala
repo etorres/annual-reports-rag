@@ -1,4 +1,5 @@
 package es.eriktorr
+package api
 
 import DocumentExtensions.{metadataAsString, put}
 

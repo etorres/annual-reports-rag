@@ -1,4 +1,5 @@
 package es.eriktorr
+package db
 
 import dev.langchain4j.data.segment.TextSegment
 import dev.langchain4j.model.embedding.EmbeddingModel

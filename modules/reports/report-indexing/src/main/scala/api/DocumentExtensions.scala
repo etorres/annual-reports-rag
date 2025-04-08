@@ -1,4 +1,5 @@
 package es.eriktorr
+package api
 
 import dev.langchain4j.data.document.Document
 

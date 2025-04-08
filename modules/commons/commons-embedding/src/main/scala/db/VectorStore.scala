@@ -1,6 +1,8 @@
 package es.eriktorr
+package db
 
 import AnyRefExtensions.ignoreResult
+import application.ElasticConfig
 
 import dev.langchain4j.data.segment.TextSegment
 import org.elasticsearch.client.RestClient

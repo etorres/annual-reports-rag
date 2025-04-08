@@ -1,4 +1,7 @@
 package es.eriktorr
+package db
+
+import application.ElasticConfig
 
 import com.typesafe.scalalogging.LazyLogging
 import dev.langchain4j.store.embedding.EmbeddingSearchRequest

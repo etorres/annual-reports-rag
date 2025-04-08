@@ -1,6 +1,7 @@
 package es.eriktorr
+package api
 
-import TextSegmentExtensions.put
+import api.TextSegmentExtensions.put
 
 import dev.langchain4j.data.document.Document
 import dev.langchain4j.data.segment.{TextSegment, TextSegmentTransformer}

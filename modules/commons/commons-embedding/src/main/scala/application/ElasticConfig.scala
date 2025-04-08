@@ -1,6 +1,7 @@
 package es.eriktorr
+package application
 
-import com.comcast.ip4s.{host, port, Host, Port}
+import com.comcast.ip4s.{Host, Port, host, port}
 import org.apache.http.HttpHost
 
 final case class ElasticConfig(host: Host, insecure: Boolean, namespace: String, port: Port):

@@ -1,7 +1,9 @@
 package es.eriktorr
+package api
 
-import DocumentExtensions.metadataAsString
-import TextSegmentExtensions.copy
+import api.DocumentExtensions.metadataAsString
+import api.TextSegmentExtensions.copy
+import db.{VectorStore, VectorStoreBuilder}
 
 import com.typesafe.scalalogging.StrictLogging
 import dev.langchain4j.data.document.loader.FileSystemDocumentLoader
@@ -36,7 +38,7 @@ final class ReportLoader(
         ReportTransformer.impl(config, verbose),
       )
       storeSummary(document)
-      storeContent(document, DocumentSplitters.recursive(300, 0) /* TODO: add tokenizer */ )
+      storeContent(document, DocumentSplitters.recursive(300, 0 /* TODO: add tokenizer */ ))
 
   private def parallelPathsFrom(dir: os.Path) =
     val paths = os.walk(path = dir, skip = _.ext.toLowerCase(Locale.US) != "pdf", maxDepth = 1)

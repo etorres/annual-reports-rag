@@ -1,4 +1,5 @@
 package es.eriktorr
+package api
 
 enum ReportMetadata(val name: String):
   case Filename extends ReportMetadata("file_name")
