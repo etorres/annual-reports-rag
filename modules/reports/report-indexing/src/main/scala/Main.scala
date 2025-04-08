@@ -1,5 +1,6 @@
 package es.eriktorr
 
+import api.OllamaModel
 import application.ReportLoaderConfig
 import domain.ReportLoaderService
 

@@ -3,6 +3,7 @@ package api
 
 import api.DocumentExtensions.metadataAsString
 import api.TextSegmentExtensions.copy
+import application.OllamaConfig
 import db.{VectorStore, VectorStoreBuilder}
 
 import com.typesafe.scalalogging.StrictLogging

@@ -1,6 +1,8 @@
 package es.eriktorr
 package application
 
+import api.OllamaModel
+
 final case class ReportLoaderConfig(
     elasticConfig: ElasticConfig,
     ollamaConfig: OllamaConfig,

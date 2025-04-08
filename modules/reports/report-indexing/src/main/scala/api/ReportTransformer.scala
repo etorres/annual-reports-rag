@@ -1,7 +1,8 @@
 package es.eriktorr
 package api
 
-import DocumentExtensions.{metadataAsString, put}
+import api.DocumentExtensions.{metadataAsString, put}
+import application.OllamaConfig
 
 import dev.langchain4j.data.document.{Document, DocumentTransformer}
 

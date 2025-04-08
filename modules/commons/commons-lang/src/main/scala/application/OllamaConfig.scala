@@ -1,4 +1,7 @@
 package es.eriktorr
+package application
+
+import api.OllamaModel
 
 import com.comcast.ip4s.{host, port, Host, Port}
 

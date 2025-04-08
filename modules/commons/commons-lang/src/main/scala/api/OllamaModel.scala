@@ -1,4 +1,5 @@
 package es.eriktorr
+package api
 
 enum OllamaModel(val name: String):
   case DeepSeekR1 extends OllamaModel("deepseek-r1")

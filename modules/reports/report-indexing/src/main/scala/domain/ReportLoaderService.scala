@@ -1,8 +1,8 @@
 package es.eriktorr
 package domain
 
-import api.ReportLoader
-import application.{ElasticConfig, ReportLoaderConfig}
+import api.{OllamaApiClient, ReportLoader}
+import application.{ElasticConfig, OllamaConfig, ReportLoaderConfig}
 import db.{VectorStore, VectorStoreBuilder}
 
 import scala.util.chaining.given

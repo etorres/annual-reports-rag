@@ -1,7 +1,8 @@
 package es.eriktorr
 package api
 
-import LangChain4jUtils.{pathTo, variablesFrom}
+import api.LangChain4jUtils.{pathTo, variablesFrom}
+import application.OllamaConfig
 
 import com.typesafe.scalalogging.StrictLogging
 import dev.langchain4j.data.document.Document
@@ -14,16 +15,14 @@ import dev.langchain4j.model.ollama.OllamaChatModel
 import java.time.Duration as JDuration
 
 final class TextSummarizer(config: OllamaConfig, verbose: Boolean) extends StrictLogging:
+  private val summaryCleaner = SummaryCleaner.impl(config.model)
+
   def summaryFrom(document: Document, filename: String): String =
     logger.info(s"Summarizing: $filename, it would take several minutes...")
     val summary = chatModel.chat(
       promptTemplate.apply(variablesFrom("content" -> document.text())).text(),
     )
-    clean(summary, filename)
-
-  private def clean(summary: String, filename: String) =
-    println(s" >> $filename, summary: \n $summary") // TODO
-    summary // TODO
+    summaryCleaner.clean(summary)
 
   private lazy val chatModel =
     val responseFormat = config.model match

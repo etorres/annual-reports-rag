@@ -1,4 +1,7 @@
 package es.eriktorr
+package api
+
+import application.OllamaConfig
 
 import com.typesafe.scalalogging.StrictLogging
 import requests.Session
