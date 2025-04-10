@@ -70,12 +70,12 @@ final class ReportLoader(
 
   private def storeSummary(document: Document): Unit =
     val summary = TextSegment
-      .from(document.metadataAsString(ReportMetadata.Summary))
-      .copy(ReportMetadata.IndexName, document)
+      .from(document.metadataAsString(DocumentMetadata.Summary))
+      .copy(DocumentMetadata.IndexName, document)
     summaryVectorStore.add(summary)
 
   private def storeContent(document: Document, documentSplitter: DocumentSplitter): Unit =
-    val indexName = document.metadataAsString(ReportMetadata.IndexName)
+    val indexName = document.metadataAsString(DocumentMetadata.IndexName)
     val textSegments = documentSplitter.split(document).asScala.toList
     val textSegmentTransformer = ChunkTransformer(document, indexName)
     val enrichedTextSegments = textSegments.map(textSegmentTransformer.transform)

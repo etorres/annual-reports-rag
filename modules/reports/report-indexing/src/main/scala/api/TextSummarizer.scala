@@ -2,13 +2,13 @@ package es.eriktorr
 package api
 
 import api.LangChain4jUtils.{pathTo, variablesFrom}
+import api.OllamaChatModelBuilderExtensions.responseFormat
 import application.OllamaConfig
 
 import com.typesafe.scalalogging.StrictLogging
 import dev.langchain4j.data.document.Document
 import dev.langchain4j.data.document.loader.FileSystemDocumentLoader
 import dev.langchain4j.data.document.parser.TextDocumentParser
-import dev.langchain4j.model.chat.request.ResponseFormat
 import dev.langchain4j.model.input.PromptTemplate
 import dev.langchain4j.model.ollama.OllamaChatModel
 
@@ -25,9 +25,6 @@ final class TextSummarizer(config: OllamaConfig, verbose: Boolean) extends Stric
     summaryCleaner.clean(summary)
 
   private lazy val chatModel =
-    val responseFormat = config.model match
-      case OllamaModel.Llama3_2 | OllamaModel.TinyLlama => ResponseFormat.JSON
-      case _ => ResponseFormat.TEXT
     OllamaChatModel
       .builder()
       .baseUrl(config.baseUrl)
@@ -36,7 +33,7 @@ final class TextSummarizer(config: OllamaConfig, verbose: Boolean) extends Stric
       .maxRetries(3)
       .modelName(config.model.name)
       .repeatPenalty(0.8d)
-      .responseFormat(responseFormat)
+      .responseFormat(config.model)
       .temperature(0.2d)
       .timeout(JDuration.ofMinutes(10L))
       .topK(40)

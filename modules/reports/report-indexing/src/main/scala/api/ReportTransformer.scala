@@ -8,10 +8,11 @@ import dev.langchain4j.data.document.{Document, DocumentTransformer}
 
 final class ReportTransformer(textSummarizer: TextSummarizer) extends DocumentTransformer:
   override def transform(document: Document): Document =
-    val filename = document.metadataAsString(ReportMetadata.Filename)
+    val filename = document.metadataAsString("file_name")
     document
-      .put(ReportMetadata.IndexName, indexNameFrom(filename))
-      .put(ReportMetadata.Summary, textSummarizer.summaryFrom(document, filename))
+      .put(DocumentMetadata.Filename, indexNameFrom(filename))
+      .put(DocumentMetadata.IndexName, indexNameFrom(filename))
+      .put(DocumentMetadata.Summary, textSummarizer.summaryFrom(document, filename))
 
   private def indexNameFrom(filename: String) = filename.replaceAll("(?<!^)[.].*", "")
 

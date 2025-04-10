@@ -10,16 +10,16 @@ import scala.util.chaining.*
 
 object TextSegmentExtensions:
   extension (self: TextSegment)
-    def copy(reportMetadata: ReportMetadata, document: Document): TextSegment =
+    def copy(documentMetadata: DocumentMetadata, document: Document): TextSegment =
       self
         .metadata()
         .put(
-          reportMetadata.name,
-          document.metadataAsString(reportMetadata),
+          documentMetadata.name,
+          document.metadataAsString(documentMetadata),
         )
       self
-    def put(reportMetadata: ReportMetadata, maybeValue: Option[String]): TextSegment =
+    def put(documentMetadata: DocumentMetadata, maybeValue: Option[String]): TextSegment =
       maybeValue
         .map: value =>
-          self.tap(_.metadata().put(reportMetadata.name, value))
+          self.tap(_.metadata().put(documentMetadata.name, value))
         .getOrElse(self)

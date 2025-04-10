@@ -7,11 +7,11 @@ import dev.langchain4j.data.document.Document
 import dev.langchain4j.data.segment.{TextSegment, TextSegmentTransformer}
 
 final class ChunkTransformer(document: Document, indexName: String) extends TextSegmentTransformer:
-  private val documentFilename = maybeValue(ReportMetadata.Filename)
-  private val documentSummary = maybeValue(ReportMetadata.Summary)
-  private val documentTitle = maybeValue(ReportMetadata.Title)
+  private val documentFilename = maybeValue(DocumentMetadata.Filename)
+  private val documentSummary = maybeValue(DocumentMetadata.Summary)
+  private val documentTitle = maybeValue(DocumentMetadata.Title)
 
-  private def maybeValue(key: ReportMetadata) =
+  private def maybeValue(key: DocumentMetadata) =
     val documentMetadata = document.metadata()
     if documentMetadata.containsKey(key.name)
     then Some(documentMetadata.getString(key.name))
@@ -19,7 +19,7 @@ final class ChunkTransformer(document: Document, indexName: String) extends Text
 
   override def transform(textSegment: TextSegment): TextSegment =
     textSegment
-      .put(ReportMetadata.IndexName, Some(indexName))
-      .put(ReportMetadata.Filename, documentFilename)
-      .put(ReportMetadata.Summary, documentSummary)
-      .put(ReportMetadata.Title, documentTitle)
+      .put(DocumentMetadata.IndexName, Some(indexName))
+      .put(DocumentMetadata.Filename, documentFilename)
+      .put(DocumentMetadata.Summary, documentSummary)
+      .put(DocumentMetadata.Title, documentTitle)

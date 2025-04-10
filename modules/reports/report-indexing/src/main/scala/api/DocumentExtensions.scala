@@ -7,7 +7,9 @@ import scala.util.chaining.*
 
 object DocumentExtensions:
   extension (self: Document)
-    def metadataAsString(reportMetadata: ReportMetadata): String =
-      self.metadata().getString(reportMetadata.name)
-    def put(reportMetadata: ReportMetadata, value: String): Document =
-      self.tap(_.metadata().put(reportMetadata.name, value))
+    def metadataAsString(key: String): String =
+      self.metadata().getString(key)
+    def metadataAsString(documentMetadata: DocumentMetadata): String =
+      metadataAsString(documentMetadata.name)
+    def put(documentMetadata: DocumentMetadata, value: String): Document =
+      self.tap(_.metadata().put(documentMetadata.name, value))

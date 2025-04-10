@@ -3,7 +3,7 @@ package application
 
 import api.OllamaModel
 
-import com.comcast.ip4s.{host, port, Host, Port}
+import com.comcast.ip4s.{Host, Port, host, port}
 
 final case class OllamaConfig(
     host: Host,

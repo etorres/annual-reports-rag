@@ -7,8 +7,6 @@ import java.util.Map as JavaMap
 import scala.jdk.CollectionConverters.given
 
 object LangChain4jUtils:
-  import scala.language.unsafeNulls
-
   @SuppressWarnings(Array("org.wartremover.warts.Throw"))
   def pathTo(
       resource: String,

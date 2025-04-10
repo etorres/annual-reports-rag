@@ -10,6 +10,8 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/modules/commons/commons-embedding" />
             <option value="$PROJECT_DIR$/modules/commons/commons-lang" />
+            <option value="$PROJECT_DIR$/modules/commons/commons-ollama" />
+            <option value="$PROJECT_DIR$/modules/reports/question-answering" />
             <option value="$PROJECT_DIR$/modules/reports/report-indexing" />
             <option value="$PROJECT_DIR$/modules/reports/sample-reports" />
             <option value="$PROJECT_DIR$/project" />

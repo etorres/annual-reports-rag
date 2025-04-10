@@ -1,7 +1,7 @@
 package es.eriktorr
 package domain
 
-import api.{OllamaModel, ReportMetadata}
+import api.OllamaModel
 import application.ReportLoaderConfig
 import db.VectorStoreRouter
 

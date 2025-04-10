@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ScalaCompilerConfiguration">
     <option name="separateProdTestSources" value="true" />
-    <profile name="sbt 1" modules="annual-reports-rag,annual-reports-rag.commons-embedding,annual-reports-rag.commons-embeddings,annual-reports-rag.commons-lang,annual-reports-rag.data-ingestion,annual-reports-rag.report-indexing,annual-reports-rag.report-ingestion,annual-reports-rag.reports-ingestion,annual-reports-rag.reports-samples,annual-reports-rag.sample-reports" />
+    <profile name="sbt 1" modules="annual-reports-rag,annual-reports-rag.commons-embedding,annual-reports-rag.commons-embeddings,annual-reports-rag.commons-lang,annual-reports-rag.commons-ollama,annual-reports-rag.data-ingestion,annual-reports-rag.question-answering,annual-reports-rag.report-indexing,annual-reports-rag.report-ingestion,annual-reports-rag.reports-ingestion,annual-reports-rag.reports-samples,annual-reports-rag.sample-reports" />
     <profile name="sbt 10" modules="annual-reports-rag.reports-samples.test">
       <option name="implicitConversions" value="true" />
       <option name="higherKinds" value="true" />
@@ -410,6 +410,134 @@
         <parameter value="-Xsemanticdb" />
         <parameter value="-semanticdb-target" />
         <parameter value="$PROJECT_DIR$/modules/commons/commons-embedding/target/scala-3.6.4/meta" />
+      </parameters>
+      <plugins>
+        <plugin path="$PROJECT_DIR$/target/scala-3.6.4/compiler_plugins/wartremover_3.6.4-3.3.1.jar" />
+      </plugins>
+    </profile>
+    <profile name="sbt 22" modules="annual-reports-rag.question-answering.test">
+      <option name="implicitConversions" value="true" />
+      <option name="higherKinds" value="true" />
+      <option name="macros" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-encoding" />
+        <parameter value="utf8" />
+        <parameter value="-Xkind-projector" />
+        <parameter value="-Wvalue-discard" />
+        <parameter value="-Wnonunit-statement" />
+        <parameter value="-Wunused:implicits" />
+        <parameter value="-Wunused:explicits" />
+        <parameter value="-Wunused:imports" />
+        <parameter value="-Wunused:locals" />
+        <parameter value="-Wunused:params" />
+        <parameter value="-Wunused:privates" />
+        <parameter value="-java-output-version" />
+        <parameter value="21" />
+        <parameter value="-Wsafe-init" />
+        <parameter value="-Yexplicit-nulls" />
+        <parameter value="-Xfatal-warnings" />
+        <parameter value="-Xsemanticdb" />
+        <parameter value="-semanticdb-target" />
+        <parameter value="$PROJECT_DIR$/modules/reports/question-answering/target/scala-3.6.4/test-meta" />
+      </parameters>
+      <plugins>
+        <plugin path="$PROJECT_DIR$/target/scala-3.6.4/compiler_plugins/wartremover_3.6.4-3.3.1.jar" />
+      </plugins>
+    </profile>
+    <profile name="sbt 23" modules="annual-reports-rag.question-answering.main">
+      <option name="implicitConversions" value="true" />
+      <option name="higherKinds" value="true" />
+      <option name="macros" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-encoding" />
+        <parameter value="utf8" />
+        <parameter value="-Xkind-projector" />
+        <parameter value="-Wvalue-discard" />
+        <parameter value="-Wnonunit-statement" />
+        <parameter value="-Wunused:implicits" />
+        <parameter value="-Wunused:explicits" />
+        <parameter value="-Wunused:imports" />
+        <parameter value="-Wunused:locals" />
+        <parameter value="-Wunused:params" />
+        <parameter value="-Wunused:privates" />
+        <parameter value="-java-output-version" />
+        <parameter value="21" />
+        <parameter value="-Wsafe-init" />
+        <parameter value="-Yexplicit-nulls" />
+        <parameter value="-Xfatal-warnings" />
+        <parameter value="-Xsemanticdb" />
+        <parameter value="-semanticdb-target" />
+        <parameter value="$PROJECT_DIR$/modules/reports/question-answering/target/scala-3.6.4/meta" />
+      </parameters>
+      <plugins>
+        <plugin path="$PROJECT_DIR$/target/scala-3.6.4/compiler_plugins/wartremover_3.6.4-3.3.1.jar" />
+      </plugins>
+    </profile>
+    <profile name="sbt 24" modules="annual-reports-rag.commons-ollama.test">
+      <option name="implicitConversions" value="true" />
+      <option name="higherKinds" value="true" />
+      <option name="macros" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-encoding" />
+        <parameter value="utf8" />
+        <parameter value="-Xkind-projector" />
+        <parameter value="-Wvalue-discard" />
+        <parameter value="-Wnonunit-statement" />
+        <parameter value="-Wunused:implicits" />
+        <parameter value="-Wunused:explicits" />
+        <parameter value="-Wunused:imports" />
+        <parameter value="-Wunused:locals" />
+        <parameter value="-Wunused:params" />
+        <parameter value="-Wunused:privates" />
+        <parameter value="-java-output-version" />
+        <parameter value="21" />
+        <parameter value="-Wsafe-init" />
+        <parameter value="-Yexplicit-nulls" />
+        <parameter value="-Xfatal-warnings" />
+        <parameter value="-Xsemanticdb" />
+        <parameter value="-semanticdb-target" />
+        <parameter value="$PROJECT_DIR$/modules/commons/commons-ollama/target/scala-3.6.4/test-meta" />
+      </parameters>
+      <plugins>
+        <plugin path="$PROJECT_DIR$/target/scala-3.6.4/compiler_plugins/wartremover_3.6.4-3.3.1.jar" />
+      </plugins>
+    </profile>
+    <profile name="sbt 25" modules="annual-reports-rag.commons-ollama.main">
+      <option name="implicitConversions" value="true" />
+      <option name="higherKinds" value="true" />
+      <option name="macros" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-encoding" />
+        <parameter value="utf8" />
+        <parameter value="-Xkind-projector" />
+        <parameter value="-Wvalue-discard" />
+        <parameter value="-Wnonunit-statement" />
+        <parameter value="-Wunused:implicits" />
+        <parameter value="-Wunused:explicits" />
+        <parameter value="-Wunused:imports" />
+        <parameter value="-Wunused:locals" />
+        <parameter value="-Wunused:params" />
+        <parameter value="-Wunused:privates" />
+        <parameter value="-java-output-version" />
+        <parameter value="21" />
+        <parameter value="-Wsafe-init" />
+        <parameter value="-Yexplicit-nulls" />
+        <parameter value="-Xfatal-warnings" />
+        <parameter value="-Xsemanticdb" />
+        <parameter value="-semanticdb-target" />
+        <parameter value="$PROJECT_DIR$/modules/commons/commons-ollama/target/scala-3.6.4/meta" />
       </parameters>
       <plugins>
         <plugin path="$PROJECT_DIR$/target/scala-3.6.4/compiler_plugins/wartremover_3.6.4-3.3.1.jar" />

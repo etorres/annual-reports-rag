@@ -63,11 +63,15 @@ lazy val `commons-embedding` = project
     ),
   )
   .dependsOn(
-    `commons-lang` % "test->test;compile->compile",
+    `commons-ollama` % "test->test;compile->compile",
   )
 
 lazy val `commons-lang` = project
   .in(file("modules/commons/commons-lang"))
+  .configure(withBaseSettings)
+
+lazy val `commons-ollama` = project
+  .in(file("modules/commons/commons-ollama"))
   .configure(usingLog4j)
   .settings(
     libraryDependencies ++= Seq(
@@ -75,7 +79,26 @@ lazy val `commons-lang` = project
       "com.lihaoyi" %% "geny" % "1.1.1",
       "com.lihaoyi" %% "requests" % "0.9.0",
       "com.lihaoyi" %% "ujson" % "4.1.0",
+      "dev.langchain4j" % "langchain4j" % "1.0.0-beta2",
+      "dev.langchain4j" % "langchain4j-ollama" % "1.0.0-beta2",
     ),
+  )
+  .dependsOn(
+    `commons-lang` % "test->test;compile->compile",
+  )
+
+lazy val `question-answering` = project
+  .in(file("modules/reports/question-answering"))
+  .configure(usingLog4j)
+  .settings(
+    libraryDependencies ++= Seq(
+      "dev.langchain4j" % "langchain4j" % "1.0.0-beta2",
+      "dev.langchain4j" % "langchain4j-ollama" % "1.0.0-beta2",
+    ),
+  )
+  .dependsOn(
+    `commons-embedding` % "test->test;compile->compile",
+    `commons-ollama` % "test->test;compile->compile",
   )
 
 lazy val `report-indexing` = project
@@ -92,20 +115,20 @@ lazy val `report-indexing` = project
   )
   .dependsOn(
     `commons-embedding` % "test->test;compile->compile",
+    `commons-ollama` % "test->test;compile->compile",
     `sample-reports` % "test->test;compile->compile",
   )
 
 lazy val `sample-reports` = project
   .in(file("modules/reports/sample-reports"))
   .configure(withBaseSettings)
-  .settings(
-    libraryDependencies ++= Seq(),
-  )
 
 lazy val root = (project in file("."))
   .aggregate(
     `commons-embedding`,
     `commons-lang`,
+    `commons-ollama`,
+    `question-answering`,
     `report-indexing`,
     `sample-reports`,
   )
