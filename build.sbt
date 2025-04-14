@@ -41,10 +41,24 @@ lazy val withBaseSettings: Project => Project = _.settings(
   Test / testOptions += Tests.Argument(MUnitFramework, "--exclude-tags=online"),
 )
 
-lazy val usingLog4j: Project => Project = withBaseSettings.compose(
+lazy val usingCatsEffect: Project => Project = withBaseSettings.compose(
   _.settings(
     libraryDependencies ++= Seq(
-      "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
+      "org.apache.logging.log4j" % "log4j-core" % "2.24.3" % Runtime,
+      "org.apache.logging.log4j" % "log4j-slf4j2-impl" % "2.24.3" % Runtime,
+      "org.typelevel" %% "cats-core" % "2.13.0",
+      "org.typelevel" %% "cats-effect" % "3.6.1",
+      "org.typelevel" %% "log4cats-slf4j" % "2.7.0",
+      "org.typelevel" %% "munit-cats-effect" % "2.1.0" % Test,
+      "org.typelevel" %% "scalacheck-effect-munit" % "1.0.4" % Test,
+    ),
+  ),
+)
+
+lazy val usingLog4cats: Project => Project = usingCatsEffect.compose(
+  _.settings(
+    libraryDependencies ++= Seq(
+      "org.typelevel" %% "log4cats-slf4j" % "2.7.0",
       "org.apache.logging.log4j" % "log4j-core" % "2.24.3" % Runtime,
       "org.apache.logging.log4j" % "log4j-slf4j2-impl" % "2.24.3" % Runtime,
     ),
@@ -53,13 +67,13 @@ lazy val usingLog4j: Project => Project = withBaseSettings.compose(
 
 lazy val `commons-embedding` = project
   .in(file("modules/commons/commons-embedding"))
-  .configure(usingLog4j)
+  .configure(usingLog4cats)
   .settings(
     libraryDependencies ++= Seq(
       "com.comcast" %% "ip4s-core" % "3.6.0",
-      "dev.langchain4j" % "langchain4j" % "1.0.0-beta2",
-      "dev.langchain4j" % "langchain4j-elasticsearch" % "1.0.0-beta2",
-      "dev.langchain4j" % "langchain4j-embeddings-all-minilm-l6-v2-q" % "1.0.0-beta2",
+      "dev.langchain4j" % "langchain4j" % "1.0.0-beta3",
+      "dev.langchain4j" % "langchain4j-elasticsearch" % "1.0.0-beta3",
+      "dev.langchain4j" % "langchain4j-embeddings-all-minilm-l6-v2-q" % "1.0.0-beta3",
     ),
   )
   .dependsOn(
@@ -68,19 +82,25 @@ lazy val `commons-embedding` = project
 
 lazy val `commons-lang` = project
   .in(file("modules/commons/commons-lang"))
-  .configure(withBaseSettings)
+  .configure(usingCatsEffect)
+  .settings(
+    libraryDependencies ++= Seq(
+      "com.lihaoyi" %% "os-lib" % "0.11.4",
+      "org.scodec" %% "scodec-bits" % "1.2.1",
+    ),
+  )
 
 lazy val `commons-ollama` = project
   .in(file("modules/commons/commons-ollama"))
-  .configure(usingLog4j)
+  .configure(usingLog4cats)
   .settings(
     libraryDependencies ++= Seq(
       "com.comcast" %% "ip4s-core" % "3.6.0",
-      "com.lihaoyi" %% "geny" % "1.1.1",
-      "com.lihaoyi" %% "requests" % "0.9.0",
-      "com.lihaoyi" %% "ujson" % "4.1.0",
-      "dev.langchain4j" % "langchain4j" % "1.0.0-beta2",
-      "dev.langchain4j" % "langchain4j-ollama" % "1.0.0-beta2",
+      "com.softwaremill.sttp.client4" %% "cats" % "4.0.2",
+      "com.softwaremill.sttp.client4" %% "circe" % "4.0.2",
+      "com.softwaremill.sttp.client4" %% "slf4j-backend" % "4.0.2",
+      "dev.langchain4j" % "langchain4j" % "1.0.0-beta3",
+      "dev.langchain4j" % "langchain4j-ollama" % "1.0.0-beta3",
     ),
   )
   .dependsOn(
@@ -89,11 +109,11 @@ lazy val `commons-ollama` = project
 
 lazy val `question-answering` = project
   .in(file("modules/reports/question-answering"))
-  .configure(usingLog4j)
+  .configure(usingCatsEffect)
   .settings(
     libraryDependencies ++= Seq(
-      "dev.langchain4j" % "langchain4j" % "1.0.0-beta2",
-      "dev.langchain4j" % "langchain4j-ollama" % "1.0.0-beta2",
+      "dev.langchain4j" % "langchain4j" % "1.0.0-beta3",
+      "dev.langchain4j" % "langchain4j-ollama" % "1.0.0-beta3",
     ),
   )
   .dependsOn(
@@ -103,13 +123,13 @@ lazy val `question-answering` = project
 
 lazy val `report-indexing` = project
   .in(file("modules/reports/report-indexing"))
-  .configure(usingLog4j)
+  .configure(usingCatsEffect)
   .settings(
     libraryDependencies ++= Seq(
       "com.lihaoyi" %% "os-lib" % "0.11.4",
-      "dev.langchain4j" % "langchain4j" % "1.0.0-beta2",
-      "dev.langchain4j" % "langchain4j-document-parser-apache-pdfbox" % "1.0.0-beta2",
-      "dev.langchain4j" % "langchain4j-ollama" % "1.0.0-beta2",
+      "dev.langchain4j" % "langchain4j" % "1.0.0-beta3",
+      "dev.langchain4j" % "langchain4j-document-parser-apache-pdfbox" % "1.0.0-beta3",
+      "dev.langchain4j" % "langchain4j-ollama" % "1.0.0-beta3",
       "org.scala-lang.modules" %% "scala-parallel-collections" % "1.2.0",
     ),
   )
