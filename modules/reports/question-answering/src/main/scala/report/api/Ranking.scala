@@ -6,7 +6,7 @@ import ollama.api.OllamaChatModelBuilderExtensions.responseFormat
 import ollama.application.OllamaConfig
 
 import cats.effect.IO
-import cats.implicits.*
+import cats.implicits.toTraverseOps
 import dev.langchain4j.memory.chat.MessageWindowChatMemory
 import dev.langchain4j.model.ollama.OllamaChatModel
 import dev.langchain4j.service.{AiServices, MemoryId, SystemMessage, UserMessage}
@@ -56,11 +56,15 @@ object Ranking:
               s"""Here is the question:
                  |$question""".stripMargin,
             )
+            relevanceScore <- RelevanceScore.from(response)
             _ <- IO.println(
-              s"${vectorResult.index} with score ${vectorResult.score} and response: $response",
+              s"${vectorResult.index} with score ${vectorResult.score}, ranking $relevanceScore, and text:\n\n$response",
             ) // TODO
           yield ()
       ) *> IO.unit
+
+  // **Relevance Score:** 0.2
+  // **2. Relevance Score:** 1.0
 
   private trait Assistant:
     @SystemMessage(fromResource = "prompt_templates/rank.txt")

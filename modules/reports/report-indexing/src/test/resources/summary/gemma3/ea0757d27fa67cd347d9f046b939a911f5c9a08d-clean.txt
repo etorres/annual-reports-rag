@@ -1,0 +1,39 @@
+**I. Canadian BanC Corp. – Financial Information**
+
+* **Management Fees:**
+    * Quadravest Capital Management Inc. charges management fees. The exact amount isn't stated, but it’s implied to be a significant portion of the fund’s expenses.
+* **Fee Structure (Quadravest):**
+    * **Administrative Fee:**  The document doesn't specify the exact percentage, but it’s implied to be a significant portion of the fund’s expenses.
+    * **Performance Fee (Potentially):** The document mentions a potential performance fee linked to the volume weighted average market price of the Class A shares.
+* **Dividends & Distributions:**
+    * **Class A Shares:** Targeted 15% annualized distribution based on the 3-day VWAP.  Net asset value must remain above $15 per unit.
+    * **Preferred Shares:**  Pays a minimum of 5% annual rate (based on the $10 repayment value) plus the $10 repayment value upon termination.
+* **Capital Return:**  Original issue price of Class A shares is returned upon termination of the company.
+* **Secondary Offering (January 31, 2023):** Raised $43,226,750 through a sale of 2,360,000 Preferred shares and 1,560,000 Class A shares.
+
+**II. Quadravest Capital Management Inc. – Company Overview**
+
+* **Focus:** Creation and management of enhanced yield products for retail investors.
+* **Strategy:** Combines fundamental equity investing with covered call writing.
+* **Principles:** Innovation, Discipline, Results, and Client Service.
+* **History:** Formed in 1997, raised over $2.5 billion in IPOs.
+* **Key Personnel:**
+    * **Peter Cruickshank:** Managing Director
+    * **Michael W. Sharp:** Retired Partner, Blake, Cassels & Graydon LLP (Legal Counsel)
+    * **Wayne Finch:** Director, President, Chief Executive and Chief Investment Officer
+    * **Laura Johnson:** Chief Investment Strategist, Managing Director and Portfolio Manager
+    * **John Steep:** President, S. Factor Consulting Inc. (Legal Counsel)
+
+**III. Supporting Services & Legal/Administrative Details**
+
+* **Auditor:** PricewaterhouseCoopers LLP
+* **Transfer Agent:** Computershare Investor Service Inc.
+* **Legal Counsel:** Blake, Cassels & Graydon LLP (and S. Factor Consulting Inc.)
+* **Custodian:** RBC Investor Services Trust
+
+**Key Takeaways:**
+
+* **Managed Fund:** Canadian BanC Corp. is a managed investment fund.
+* **Fee-Based Structure:** The fund’s performance is heavily influenced by the fees charged by Quadravest.
+* **Risk Management:** The use of covered calls suggests a strategy aimed at mitigating downside risk.
+* **Regulatory Oversight:** The involvement of legal counsel (Blake, Cassels & Graydon LLP) indicates a focus on compliance and legal matters.

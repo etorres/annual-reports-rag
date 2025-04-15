@@ -1,0 +1,44 @@
+**1. Company Overview:**
+
+*   **Name:** Eurocell plc
+*   **Industry:** Plastic Building Products (specifically PVC profiles for windows, doors, and cladding)
+*   **Registered Office:** High View Road, South Normanton, Alfreton, DE55 2DT
+*   **Website:** www.eurocell.co.uk
+
+**2. Financial Highlights (Key Numbers - 2022):**
+
+*   **Revenue:** Not explicitly stated, but implied through the context of the report.
+*   **Profit Before Tax:** Not explicitly stated, but the report focuses on key performance indicators.
+*   **Net Debt:** £21.0 million (as of December 31, 2022)
+*   **EBITDA (Pre-IFRS 16):**  Used for calculating interest expense.  The report notes that current economic and market trends suggest the Sterling SONIA rate will remain relatively stable.
+
+**3. Key Financial Metrics & Notes:**
+
+*   **Interest Expense:** Calculated based on the ratio of total net debt to consolidated EBITDA.  The report highlights the use of the Sterling SONIA rate.
+*   **Borrowings:** £21.0 million (as of December 31, 2022).  Costs associated with the previous facility were expensed (£0.3 million) and unamortised costs were £0.7 million.
+*   **Net Debt:** £21.0 million (as of December 31, 2022)
+
+**4. Operational Information:**
+
+*   **Products:** PVC profiles for windows, doors, and cladding.
+*   **Key Management Personnel:** Derek Mapp, Frank Nelson, Martyn Coffey, Alison Littley, Kate Allum, Iraj Amiri, Mark Kelly, Michael Scott.
+*   **Related Party Transactions:**
+    *   **Kellmann Recruitment Limited:** Controlled by T Kelly (close family member of a Director).  Transactions were £211,000 (2021: £147,000).
+
+**5.  Accounting Policies & Notes:**
+
+*   **IFRS 16:**  The report mentions the use of IFRS 16 (Leases) and the use of EBITDA for calculating interest expense.
+*   **Sterling SONIA Rate:**  Used as a benchmark for interest rates.
+*   **Cost Capitalization:**  Costs associated with the previous facility were capitalized.
+
+**6. Sustainability Information:**
+
+*   **Carbon Neutral Company:** Certified to ISO 14001.
+*   **FSC Certified Paper:**  Used for printing.
+*   **RoHS Compliance:**  Inks used comply with RoHS legislation.
+*   **Carbon Balanced:**  Through partnership with the World Land Trust.
+
+**7.  Contact Information:**
+
+*   **Website:** www.eurocell.co.uk
+*   **Investor Information:**  Available on the website.

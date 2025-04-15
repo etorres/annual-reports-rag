@@ -34,9 +34,7 @@ object Main extends IOApp:
           _ <- ollamaApiClient.preload()
           _ <- logger.info(s"You asked: $question")
           vectorResults <- vectorStoreRouter.bestMatchFor(question, 3)
-          // TODO: filter results below a threshold (e.g 0.5)
-          _ = vectorResults.foreach: result =>
-            println(s" >> INDEX: ${result.index}, score: ${result.score}")
-          _ <- Ranking.impl(config.ollamaConfig, verbose).rank(question, vectorResults)
+          top10VectorResults = vectorResults.sortBy(_.score).reverse.take(10)
+          _ <- Ranking.impl(config.ollamaConfig, verbose).rank(question, top10VectorResults)
           _ <- logger.info("Here is my response:")
         yield ExitCode.Success

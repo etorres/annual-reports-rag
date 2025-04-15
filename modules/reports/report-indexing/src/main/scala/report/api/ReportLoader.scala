@@ -7,18 +7,23 @@ import common.security.MessageDigest
 import embedding.db.{VectorStore, VectorStoreBuilder}
 import report.api.DocumentExtensions.metadataAsString
 
+import cats.effect.implicits.concurrentParTraverseOps
 import cats.effect.{IO, Resource}
-import cats.implicits.*
+import cats.implicits.toTraverseOps
 import dev.langchain4j.data.document.Document
 import org.apache.commons.io.FilenameUtils
 import org.typelevel.log4cats.Logger
 
-final class ReportLoader(vectorStoreBuilder: VectorStoreBuilder)(using logger: Logger[IO]):
+final class ReportLoader(
+    maximumParallelism: Int,
+    textSummarizer: TextSummarizer,
+    vectorStoreBuilder: VectorStoreBuilder,
+)(using logger: Logger[IO]):
   def loadReportsFrom(dir: os.Path): IO[Int] =
     for
       paths <- PathFinder.find(dir = dir, FileType.PDF)
       _ <- logger.info(s"Loading ${paths.length} reports...")
-      _ <- paths.parTraverse: path =>
+      _ <- paths.parTraverseN(maximumParallelism): path =>
         for
           _ <- logger.info(s"Loading report ${path.last}...")
           document <- loadDocument(path)
@@ -30,7 +35,8 @@ final class ReportLoader(vectorStoreBuilder: VectorStoreBuilder)(using logger: L
     for
       document <- PdfDocument.loadDocument(path)
       fileChecksum <- MessageDigest.checksum(path)
-      enrichedDocument = ReportTransformer.transform(document, fileChecksum)
+      summary <- textSummarizer.summaryFrom(document, path.last)
+      enrichedDocument = ReportTransformer.transform(document, fileChecksum, summary)
     yield enrichedDocument
 
   private def loadPages(path: os.Path, document: Document) =
