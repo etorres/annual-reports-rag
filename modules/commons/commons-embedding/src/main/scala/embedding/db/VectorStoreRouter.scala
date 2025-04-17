@@ -7,7 +7,7 @@ import embedding.db.JsonDataListExtensions.{integerFrom, textFrom}
 
 import cats.data.NonEmptyList
 import cats.effect.IO
-import cats.implicits.{catsSyntaxParallelFlatTraverse1, catsSyntaxTuple3Semigroupal, toTraverseOps}
+import cats.implicits.{catsSyntaxParallelFlatTraverse1, catsSyntaxTuple4Semigroupal, toTraverseOps}
 import co.elastic.clients.elasticsearch.sql.QueryRequest
 import dev.langchain4j.store.embedding.EmbeddingSearchRequest
 import org.typelevel.log4cats.Logger
@@ -89,6 +89,7 @@ object VectorStoreRouter:
         val pagesFilter = pages.toList.mkString("(", ",", ")")
         val sql =
           s"""SELECT
+             |  ${columnFrom(DocumentMetadata.Chunk)},
              |  ${columnFrom(DocumentMetadata.Filename)},
              |  ${columnFrom(DocumentMetadata.Page)},
              |  text
@@ -99,12 +100,13 @@ object VectorStoreRouter:
           documentResults <- rows.traverse: values =>
             IO.fromEither:
               (
+                values.integerFrom(columns, columnFrom(DocumentMetadata.Chunk)),
                 values.textFrom(columns, columnFrom(DocumentMetadata.Filename)),
                 values.integerFrom(columns, columnFrom(DocumentMetadata.Page)),
                 values.textFrom(columns, "text"),
               ).tupled.map:
-                case (filename, page, text) =>
-                  DocumentResult(filename, page, text)
+                case (chunk, filename, page, text) =>
+                  DocumentResult(chunk, filename, page, text)
         yield documentResults
 
       private def columnFrom(documentMetadata: DocumentMetadata) =

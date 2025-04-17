@@ -72,8 +72,9 @@ final class ReportLoader(
 
   private def storeVectors(page: Document, vectorStore: VectorStore) =
     val textSegments = PdfDocument.toTextSegments(page)
-    val enrichedTextSegments = textSegments.map: textSegment =>
-      ChunkTransformer.transform(page, textSegment)
+    val enrichedTextSegments = textSegments.zipWithIndex.map:
+      case (textSegment, idx) =>
+        ChunkTransformer.transform(idx + 1, page, textSegment)
     vectorStore.add(enrichedTextSegments)
 
   private def indexNameFrom(document: Document) =

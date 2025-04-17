@@ -2,6 +2,7 @@ package es.eriktorr
 package common.api
 
 enum DocumentMetadata(val name: String):
+  case Chunk extends DocumentMetadata("Chunk")
   case Filename extends DocumentMetadata("Filename")
   case Page extends DocumentMetadata("Page")
   case Sha1FileChecksum extends DocumentMetadata("Sha1FileChecksum")
