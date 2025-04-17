@@ -1,0 +1,4 @@
+Bank account number: 13201652
+Bank SWIFT code: CTBAAU2S
+Bank address: 231 Swanston St, Melbourne, VIC 3000, Australia
+The BSB number identifies a branch of a financial institution in Australia. When transferring money to Australia, the

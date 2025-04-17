@@ -1,0 +1,4 @@
+Adobe Acrobat PDF Files
+Adobe® Portable Document Format (PDF) is a universal file format that preserves all
+of the fonts, formatting, colours and graphics of any source document, regardless of
+the application and platform used to create it.

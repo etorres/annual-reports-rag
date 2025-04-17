@@ -2,11 +2,13 @@ package es.eriktorr
 package embedding.db
 
 import common.api.DocumentMetadata
-import embedding.db.ElasticError.ListIndexesFailed
+import embedding.db.ElasticError.{ListIndexesFailed, QueryFailed}
+import embedding.db.JsonDataListExtensions.{integerFrom, textFrom}
 
+import cats.data.NonEmptyList
 import cats.effect.IO
-import cats.implicits.*
-import co.elastic.clients.elasticsearch.indices.IndicesStatsRequest
+import cats.implicits.{catsSyntaxParallelFlatTraverse1, catsSyntaxTuple3Semigroupal, toTraverseOps}
+import co.elastic.clients.elasticsearch.sql.QueryRequest
 import dev.langchain4j.store.embedding.EmbeddingSearchRequest
 import org.typelevel.log4cats.Logger
 
@@ -14,12 +16,10 @@ import scala.jdk.CollectionConverters.given
 
 trait VectorStoreRouter extends ElasticVectorStore:
   def bestMatchFor(question: String, maxResults: Int): IO[List[VectorResult]]
+  def findBy(index: String, pages: NonEmptyList[Int]): IO[List[DocumentResult]]
 
 object VectorStoreRouter:
-  def impl(
-      elasticClient: ElasticClient,
-      key: DocumentMetadata,
-  )(using logger: Logger[IO]): VectorStoreRouter =
+  def impl(elasticClient: ElasticClient)(using logger: Logger[IO]): VectorStoreRouter =
     new VectorStoreRouter:
       override def bestMatchFor(
           question: String,
@@ -27,16 +27,14 @@ object VectorStoreRouter:
       ): IO[List[VectorResult]] =
         for
           indices <- listAllIndices()
-          vectorResults <- indices.flatTraverse: index =>
+          vectorResults <- indices.parFlatTraverse: index =>
             bestMatchFor(index, question, maxResults)
         yield vectorResults
 
       private def listAllIndices() =
         for
           response <- IO.blocking:
-            elasticClient.elasticsearchClient
-              .indices()
-              .stats(IndicesStatsRequest.Builder().build())
+            elasticClient.elasticsearchClient.indices().stats()
           shards = response.shards()
           _ <-
             if shards.failed().doubleValue() > 0d then
@@ -65,15 +63,64 @@ object VectorStoreRouter:
               .matches()
               .asScala
               .toList
-              .filter(_.embedded().metadata().containsKey(key.name))
+              .filter: embeddingMatch =>
+                val metadata = embeddingMatch.embedded().metadata()
+                List(
+                  DocumentMetadata.Page,
+                  DocumentMetadata.Sha1FileChecksum,
+                )
+                  .forall: documentMetadata =>
+                    metadata.containsKey(documentMetadata.name)
               .sortBy(_.score())
               .takeRight(maxResults)
           _ <- logger.debug(s"$index produces ${embeddingMatches.length} matches")
           result = embeddingMatches.map: embeddingMatch =>
+            val metadata = embeddingMatch.embedded().metadata()
             VectorResult(
               id = embeddingMatch.embeddingId(),
-              index = embeddingMatch.embedded().metadata().getString(key.name),
+              index = metadata.getString(DocumentMetadata.Sha1FileChecksum.name),
+              page = metadata.getInteger(DocumentMetadata.Page.name),
               score = embeddingMatch.score(),
               text = embeddingMatch.embedded().text(),
             )
         yield result
+
+      override def findBy(index: String, pages: NonEmptyList[Int]): IO[List[DocumentResult]] =
+        val pagesFilter = pages.toList.mkString("(", ",", ")")
+        val sql =
+          s"""SELECT
+             |  ${columnFrom(DocumentMetadata.Filename)},
+             |  ${columnFrom(DocumentMetadata.Page)},
+             |  text
+             |FROM $index
+             |WHERE ${columnFrom(DocumentMetadata.Page)} IN $pagesFilter""".stripMargin
+        for
+          (columns, rows) <- runQuery(sql)
+          documentResults <- rows.traverse: values =>
+            IO.fromEither:
+              (
+                values.textFrom(columns, columnFrom(DocumentMetadata.Filename)),
+                values.integerFrom(columns, columnFrom(DocumentMetadata.Page)),
+                values.textFrom(columns, "text"),
+              ).tupled.map:
+                case (filename, page, text) =>
+                  DocumentResult(filename, page, text)
+        yield documentResults
+
+      private def columnFrom(documentMetadata: DocumentMetadata) =
+        s"metadata.${documentMetadata.name}"
+
+      private def runQuery(sql: String) =
+        for
+          queryResponse <- IO.blocking:
+            elasticClient.elasticsearchClient.sql().query(QueryRequest.Builder().query(sql).build())
+          (columns, rows) <-
+            if queryResponse.isRunning || queryResponse.isPartial then
+              IO.raiseError(QueryFailed(sql))
+            else
+              IO.pure:
+                (
+                  queryResponse.columns().asScala.toList,
+                  queryResponse.rows().asScala.toList.map(_.asScala.toList),
+                )
+        yield (columns, rows)

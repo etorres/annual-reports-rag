@@ -10,6 +10,7 @@ import cats.implicits.toTraverseOps
 import dev.langchain4j.memory.chat.MessageWindowChatMemory
 import dev.langchain4j.model.ollama.OllamaChatModel
 import dev.langchain4j.service.{AiServices, MemoryId, SystemMessage, UserMessage}
+import org.typelevel.log4cats.Logger
 
 import java.time.Duration as JDuration
 
@@ -17,7 +18,7 @@ trait Ranking:
   def rank(question: String, vectorResults: List[VectorResult]): IO[Unit]
 
 object Ranking:
-  def impl(config: OllamaConfig, verbose: Boolean): Ranking =
+  def impl(config: OllamaConfig, verbose: Boolean)(using logger: Logger[IO]): Ranking =
     val chatModel = OllamaChatModel
       .builder()
       .baseUrl(config.baseUrl)
@@ -46,9 +47,13 @@ object Ranking:
       (vectorResults.zipWithIndex.traverse:
         case (vectorResult, idx) =>
           for
+            _ <- logger.info(
+              s"Ranking vector from index ${vectorResult.index}, it would take a few seconds...",
+            )
             _ <- chat(
               idx,
               s"""Here is the retrieved text block:
+                 |
                  |${vectorResult.text}""".stripMargin,
             )
             response <- chat(
@@ -62,9 +67,6 @@ object Ranking:
             ) // TODO
           yield ()
       ) *> IO.unit
-
-  // **Relevance Score:** 0.2
-  // **2. Relevance Score:** 1.0
 
   private trait Assistant:
     @SystemMessage(fromResource = "prompt_templates/rank.txt")

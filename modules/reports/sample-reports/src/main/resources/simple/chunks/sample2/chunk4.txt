@@ -1,0 +1,4 @@
+When transferring money to Australia, the
+BSB number is used together with the bank account number and the SWIFT code. Australian banks do not use IBAN
+numbers.
+www.yeslogic.com

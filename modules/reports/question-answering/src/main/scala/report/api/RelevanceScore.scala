@@ -18,4 +18,4 @@ object RelevanceScore:
     )(IllegalArgumentException(s"Cannot extract the relevance score from: $text"))
 
   private lazy val relevanceScorePattern: Regex =
-    """\*\*(\d+\.\s)?(Relevance Score:\*\*\s)(?<score>\d+\.\d+)""".r.unanchored
+    """\*\*(\d+\.\s)?(Relevance Score:[\\*]{0,2}\s)(?<score>\d+\.\d+)""".r.unanchored

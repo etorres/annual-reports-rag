@@ -1,7 +1,6 @@
 package es.eriktorr
 package report
 
-import common.api.DocumentMetadata
 import embedding.db.{ElasticClient, VectorStoreRouter}
 import ollama.api.{HttpClient, OllamaApiClient, OllamaModel}
 import report.api.Ranking
@@ -24,17 +23,22 @@ object Main extends IOApp:
       httpClient <- HttpClient.resource(30.seconds)
       ollamaApiClient = OllamaApiClient(httpClient, config.ollamaConfig)
       elasticClient <- ElasticClient.resource(config.elasticConfig)
-      vectorStoreRouter = VectorStoreRouter.impl(
-        elasticClient,
-        DocumentMetadata.Sha1FileChecksum,
-      )
-    yield (logger, ollamaApiClient, vectorStoreRouter)).use:
-      case (logger, ollamaApiClient, vectorStoreRouter) =>
+      vectorStoreRouter = VectorStoreRouter.impl(elasticClient)
+      ranking = Ranking.impl(config.ollamaConfig, verbose)
+    yield (logger, ollamaApiClient, ranking, vectorStoreRouter)).use:
+      case (logger, ollamaApiClient, ranking, vectorStoreRouter) =>
         for
           _ <- ollamaApiClient.preload()
           _ <- logger.info(s"You asked: $question")
-          vectorResults <- vectorStoreRouter.bestMatchFor(question, 3)
-          top10VectorResults = vectorResults.sortBy(_.score).reverse.take(10)
-          _ <- Ranking.impl(config.ollamaConfig, verbose).rank(question, top10VectorResults)
+          vectorResults <- vectorStoreRouter.bestMatchFor(question, 30)
+          top10VectorResults = vectorResults.sortBy(_.score).reverse.take(30)
+
+          _ =
+            // TODO
+            top10VectorResults.foreach(x => println(s" >> TOP_10: ${x.index}, page: ${x.page}"))
+          _ <- if true then IO.raiseError(RuntimeException()) else IO.unit
+          // TODO
+
+          _ <- ranking.rank(question, top10VectorResults)
           _ <- logger.info("Here is my response:")
         yield ExitCode.Success

@@ -1,0 +1,2 @@
+• Compact PDF files are smaller than their source files and download a
+page at a time for fast display on the Web.

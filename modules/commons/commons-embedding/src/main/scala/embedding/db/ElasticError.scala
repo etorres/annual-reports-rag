@@ -12,3 +12,4 @@ object ElasticError:
       extends ElasticError(
         s"The index $indexName cannot be refreshed with $failedShards failed shards",
       )
+  final case class QueryFailed(sql: String) extends ElasticError(s"Failed to query: $sql")

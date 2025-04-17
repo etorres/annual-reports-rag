@@ -1,0 +1,5 @@
+• PDF files always display exactly as created, regardless of fonts, software, and
+operating systems. Fonts, and graphics are not lost due to platform, software, and
+version incompatibilities.
+• The free Acrobat Reader is easy to download and can be freely distributed by
+anyone.

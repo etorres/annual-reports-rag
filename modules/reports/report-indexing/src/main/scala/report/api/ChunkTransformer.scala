@@ -10,7 +10,7 @@ import dev.langchain4j.data.segment.TextSegment
 import scala.annotation.tailrec
 
 object ChunkTransformer:
-  def transform(textSegment: TextSegment, parent: Document): TextSegment =
+  def transform(parent: Document, textSegment: TextSegment): TextSegment =
     @tailrec
     def copy(accumulator: TextSegment, keys: List[DocumentMetadata]): TextSegment =
       keys match

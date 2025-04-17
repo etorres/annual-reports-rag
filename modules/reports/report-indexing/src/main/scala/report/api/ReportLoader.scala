@@ -7,7 +7,7 @@ import common.security.MessageDigest
 import embedding.db.{VectorStore, VectorStoreBuilder}
 import report.api.DocumentExtensions.metadataAsString
 
-import cats.effect.implicits.concurrentParTraverseOps
+import cats.implicits.catsSyntaxParallelTraverse1
 import cats.effect.{IO, Resource}
 import cats.implicits.toTraverseOps
 import dev.langchain4j.data.document.Document
@@ -15,15 +15,13 @@ import org.apache.commons.io.FilenameUtils
 import org.typelevel.log4cats.Logger
 
 final class ReportLoader(
-    maximumParallelism: Int,
-    textSummarizer: TextSummarizer,
     vectorStoreBuilder: VectorStoreBuilder,
 )(using logger: Logger[IO]):
   def loadReportsFrom(dir: os.Path): IO[Int] =
     for
       paths <- PathFinder.find(dir = dir, FileType.PDF)
       _ <- logger.info(s"Loading ${paths.length} reports...")
-      _ <- paths.parTraverseN(maximumParallelism): path =>
+      _ <- paths.parTraverse: path =>
         for
           _ <- logger.info(s"Loading report ${path.last}...")
           document <- loadDocument(path)
@@ -35,8 +33,7 @@ final class ReportLoader(
     for
       document <- PdfDocument.loadDocument(path)
       fileChecksum <- MessageDigest.checksum(path)
-      summary <- textSummarizer.summaryFrom(document, path.last)
-      enrichedDocument = ReportTransformer.transform(document, fileChecksum, summary)
+      enrichedDocument = ReportTransformer.transform(document, fileChecksum)
     yield enrichedDocument
 
   private def loadPages(path: os.Path, document: Document) =
@@ -76,7 +73,7 @@ final class ReportLoader(
   private def storeVectors(page: Document, vectorStore: VectorStore) =
     val textSegments = PdfDocument.toTextSegments(page)
     val enrichedTextSegments = textSegments.map: textSegment =>
-      ChunkTransformer.transform(textSegment, page)
+      ChunkTransformer.transform(page, textSegment)
     vectorStore.add(enrichedTextSegments)
 
   private def indexNameFrom(document: Document) =

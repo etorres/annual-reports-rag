@@ -2,19 +2,11 @@ package es.eriktorr
 package report.application
 
 import embedding.application.ElasticConfig
-import ollama.api.OllamaModel
-import ollama.application.OllamaConfig
 
-final case class ReportLoaderConfig(
-    elasticConfig: ElasticConfig,
-    maximumParallelism: Int,
-    ollamaConfig: OllamaConfig,
-)
+final case class ReportLoaderConfig(elasticConfig: ElasticConfig)
 
 object ReportLoaderConfig:
-  def localContainerFor(maximumParallelism: Int, ollamaModel: OllamaModel): ReportLoaderConfig =
+  val localContainer: ReportLoaderConfig =
     ReportLoaderConfig(
       ElasticConfig.localContainerFor("embeddings"),
-      maximumParallelism,
-      OllamaConfig.localContainerFor(ollamaModel),
     )
