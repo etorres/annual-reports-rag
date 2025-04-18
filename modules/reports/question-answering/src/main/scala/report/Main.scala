@@ -1,12 +1,14 @@
 package es.eriktorr
 package report
 
-import embedding.db.{ElasticClient, VectorStoreRouter}
+import embedding.db.{ElasticClient, VectorResult, VectorStoreRouter}
 import ollama.api.{HttpClient, OllamaApiClient, OllamaModel}
-import report.api.Ranking
+import report.api.{PageRebuilding, Ranking}
 import report.application.QuestionAnsweringConfig
 
+import cats.data.NonEmptyList
 import cats.effect.{ExitCode, IO, IOApp, Resource}
+import cats.implicits.catsSyntaxParallelFlatTraverse1
 import org.typelevel.log4cats.Logger
 import org.typelevel.log4cats.slf4j.Slf4jLogger
 
@@ -30,15 +32,35 @@ object Main extends IOApp:
         for
           _ <- ollamaApiClient.preload()
           _ <- logger.info(s"You asked: $question")
-          vectorResults <- vectorStoreRouter.bestMatchFor(question, 30)
-          top10VectorResults = vectorResults.sortBy(_.score).reverse.take(30)
+          topNVectorResults <- topNRelevantChunks(config.topN, question, vectorStoreRouter)
+          pages <- pagesFrom(topNVectorResults, vectorStoreRouter)
 
           _ =
             // TODO
-            top10VectorResults.foreach(x => println(s" >> TOP_10: ${x.index}, page: ${x.page}"))
+            topNVectorResults.foreach(x => println(s" >> TOP_N: ${x.index}, page: ${x.page}"))
+            pages.foreach(x => println(s" >> PAGE: ${x.filename}, ${x.page}, ${x.text}"))
           _ <- if true then IO.raiseError(RuntimeException()) else IO.unit
           // TODO
 
-          _ <- ranking.rank(question, top10VectorResults)
+          _ <- ranking.rank(question, topNVectorResults)
           _ <- logger.info("Here is my response:")
         yield ExitCode.Success
+
+  private def topNRelevantChunks(n: Int, question: String, vectorStoreRouter: VectorStoreRouter) =
+    for
+      vectorResults <- vectorStoreRouter.bestMatchFor(question, n)
+      topNVectorResults = vectorResults.sortBy(_.score).reverse.take(n)
+    yield topNVectorResults
+
+  private def pagesFrom(vectorResults: List[VectorResult], vectorStoreRouter: VectorStoreRouter) =
+    for
+      documentResults <- vectorResults
+        .groupBy(_.index)
+        .view
+        .mapValues(_.map(_.page).distinct)
+        .toList
+        .parFlatTraverse:
+          case (index, pages) =>
+            vectorStoreRouter.findBy(index, NonEmptyList.fromListUnsafe(pages))
+      pages = PageRebuilding.rebuild(documentResults)
+    yield pages

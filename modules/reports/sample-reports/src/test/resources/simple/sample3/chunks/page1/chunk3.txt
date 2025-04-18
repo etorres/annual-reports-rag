@@ -1,3 +1,4 @@
 All you need is the free Adobe Acrobat
 Reader. Recipients of other file formats sometimes can't open files because they
 don't have the applications used to create the documents.
+• PDF files always print correctly on any printing device.
