@@ -21,18 +21,22 @@ object PageRebuilding:
                 then next.length
                 else overlapping(text, next)
           @tailrec
-          def deduplicate(accumulated: List[String], chunks: List[String]): List[String] =
+          def deduplicate(accumulated: String, chunks: List[String]): String =
             chunks match
               case Nil => accumulated
               case ::(head, next) =>
                 val lines = head.linesIterator.toList
-                val overlap = overlapping(accumulated.mkString("\n"), lines)
-                deduplicate(accumulated ++ lines.drop(overlap), next)
+                val overlap = overlapping(accumulated, lines)
+                val update =
+                  (if accumulated.nonEmpty
+                   then accumulated ++ "\n"
+                   else accumulated) ++ lines.drop(overlap).mkString("\n")
+                deduplicate(update, next)
           val sortedChunks = chunks
             .sortBy:
               case (chunk, _) => chunk
             .map:
               case (_, text) => text
-          val text = deduplicate(List.empty, sortedChunks).mkString("\n")
+          val text = deduplicate("", sortedChunks)
           Page(filename, page, text)
       .toList
