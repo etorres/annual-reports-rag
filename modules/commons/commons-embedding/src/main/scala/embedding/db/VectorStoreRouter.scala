@@ -77,7 +77,7 @@ object VectorStoreRouter:
           result = embeddingMatches.map: embeddingMatch =>
             val metadata = embeddingMatch.embedded().metadata()
             VectorResult(
-              id = embeddingMatch.embeddingId(),
+              filename = metadata.getString(DocumentMetadata.Filename.name),
               index = elasticClient.indexNameFrom(
                 metadata.getString(DocumentMetadata.Sha1FileChecksum.name),
               ),

@@ -2,7 +2,7 @@ package es.eriktorr
 package embedding.db
 
 final case class VectorResult(
-    id: String,
+    filename: String,
     index: String,
     page: Int,
     score: Double,
