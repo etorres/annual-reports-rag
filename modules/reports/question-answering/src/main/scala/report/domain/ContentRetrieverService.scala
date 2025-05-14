@@ -1,7 +1,7 @@
 package es.eriktorr
 package report.domain
 
-import embedding.db.{VectorResult, VectorStoreRouter}
+import embedding.db.{Question, VectorResult, VectorStoreRouter}
 import report.api.{PageRebuilding, RankedPage, Ranking}
 import report.application.QuestionAnsweringConfig
 
@@ -14,9 +14,14 @@ final class ContentRetrieverService(
     ranking: Ranking,
     vectorStoreRouter: VectorStoreRouter,
 ):
-  def relevantContextFor(question: String): IO[String] =
+  def relevantContextFor(companyName: String, question: String): IO[String] =
     for
-      topNVectorResults <- topNRelevantChunks(config.topN, question, vectorStoreRouter)
+      topNVectorResults <- topNRelevantChunks(
+        config.topN,
+        companyName,
+        question,
+        vectorStoreRouter,
+      )
       pages <- pagesFrom(topNVectorResults, vectorStoreRouter)
       rankedPages <- ranking.rank(pages, question, topNVectorResults)
       _ = // TODO
@@ -54,8 +59,13 @@ final class ContentRetrieverService(
       pages = PageRebuilding.rebuild(documentResults)
     yield pages
 
-  private def topNRelevantChunks(n: Int, question: String, vectorStoreRouter: VectorStoreRouter) =
+  private def topNRelevantChunks(
+      n: Int,
+      companyName: String,
+      question: String,
+      vectorStoreRouter: VectorStoreRouter,
+  ) =
     for
-      vectorResults <- vectorStoreRouter.bestMatchFor(question, n)
+      vectorResults <- vectorStoreRouter.bestMatchFor(Question(companyName, question), n)
       topNVectorResults = vectorResults.sortBy(_.score).reverse.take(n)
     yield topNVectorResults

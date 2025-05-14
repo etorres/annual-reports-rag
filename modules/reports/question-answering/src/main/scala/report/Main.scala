@@ -15,7 +15,8 @@ import scala.concurrent.duration.DurationInt
 
 object Main extends IOApp:
   override def run(args: List[String]): IO[ExitCode] =
-    val question = "Who is the Board Chairman in the company \"Canadian Banc Corp.\"?"
+    val companyName = "Canadian Banc Corp."
+    val question = s"Who is the Board Chairman in the company \"$companyName\"?"
     val config = QuestionAnsweringConfig.localContainerFor(OllamaModel.Gemma3)
     val verbose = false
     (for
@@ -32,7 +33,7 @@ object Main extends IOApp:
         for
           _ <- ollamaApiClient.preload()
           _ <- logger.info(s"You asked: $question")
-          relevantContext <- contentRetrieverService.relevantContextFor(question)
+          relevantContext <- contentRetrieverService.relevantContextFor(companyName, question)
           _ = println(s" >> RELEVANT_CONTEXT:\n$relevantContext") // TODO
           _ <- logger.info("Here is my response:")
         yield ExitCode.Success

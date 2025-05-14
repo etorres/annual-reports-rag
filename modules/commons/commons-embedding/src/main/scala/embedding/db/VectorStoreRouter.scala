@@ -3,11 +3,12 @@ package embedding.db
 
 import common.api.DocumentMetadata
 import embedding.db.ElasticError.{ListIndexesFailed, QueryFailed}
+import embedding.db.ElasticExtensions.unique
 import embedding.db.JsonDataListExtensions.{integerFrom, textFrom}
 
 import cats.data.NonEmptyList
 import cats.effect.IO
-import cats.implicits.{catsSyntaxParallelFlatTraverse1, catsSyntaxTuple4Semigroupal, toTraverseOps}
+import cats.implicits.{catsSyntaxParallelTraverse1, catsSyntaxTuple4Semigroupal, toTraverseOps}
 import co.elastic.clients.elasticsearch.sql.QueryRequest
 import dev.langchain4j.store.embedding.EmbeddingSearchRequest
 import org.typelevel.log4cats.Logger
@@ -15,20 +16,27 @@ import org.typelevel.log4cats.Logger
 import scala.jdk.CollectionConverters.given
 
 trait VectorStoreRouter extends ElasticVectorStore:
-  def bestMatchFor(question: String, maxResults: Int): IO[List[VectorResult]]
+  def bestMatchFor(question: Question, maxResults: Int): IO[List[VectorResult]]
   def findBy(index: String, pages: NonEmptyList[Int]): IO[List[DocumentResult]]
 
 object VectorStoreRouter:
   def impl(elasticClient: ElasticClient)(using logger: Logger[IO]): VectorStoreRouter =
     new VectorStoreRouter:
       override def bestMatchFor(
-          question: String,
+          question: Question,
           maxResults: Int,
       ): IO[List[VectorResult]] =
         for
-          indices <- listAllIndices()
-          vectorResults <- indices.parFlatTraverse: index =>
-            bestMatchFor(index, question, maxResults)
+          allIndices <- listAllIndices()
+          maybeIndex <- allIndices
+            .parTraverse: index =>
+              matches(index, question.companyName)
+                .ifM(ifTrue = IO.some(index), ifFalse = IO.none)
+            .map(_.collectFirst { case Some(value) => value })
+          index <- IO.fromOption(maybeIndex)(
+            IllegalArgumentException(s"No index found for the company: ${question.companyName}"),
+          )
+          vectorResults <- bestMatchFor(index, question.question, maxResults)
         yield vectorResults
 
       private def listAllIndices() =
@@ -86,6 +94,17 @@ object VectorStoreRouter:
               text = embeddingMatch.embedded().text(),
             )
         yield result
+
+      private def matches(index: String, companyName: String) =
+        val sql =
+          s"""SELECT ${columnFrom(DocumentMetadata.CompanyName)}
+             |FROM $index
+             |LIMIT 1""".stripMargin
+        for
+          (columns, row) <- runQuery(sql).unique
+          obtained <- IO.fromEither:
+            row.textFrom(columns, columnFrom(DocumentMetadata.CompanyName))
+        yield obtained == companyName
 
       override def findBy(index: String, pages: NonEmptyList[Int]): IO[List[DocumentResult]] =
         val pagesFilter = pages.toList.mkString("(", ",", ")")
