@@ -70,7 +70,7 @@ lazy val `commons-embedding` = project
   .configure(usingLog4cats)
   .settings(
     libraryDependencies ++= Seq(
-      "com.comcast" %% "ip4s-core" % "3.6.0",
+      "com.comcast" %% "ip4s-core" % "3.7.0",
       "dev.langchain4j" % "langchain4j" % "1.0.0-beta3",
       "dev.langchain4j" % "langchain4j-elasticsearch" % "1.0.0-beta3",
       "dev.langchain4j" % "langchain4j-embeddings-all-minilm-l6-v2-q" % "1.0.0-beta3",
@@ -95,10 +95,10 @@ lazy val `commons-ollama` = project
   .configure(usingLog4cats)
   .settings(
     libraryDependencies ++= Seq(
-      "com.comcast" %% "ip4s-core" % "3.6.0",
-      "com.softwaremill.sttp.client4" %% "cats" % "4.0.2",
-      "com.softwaremill.sttp.client4" %% "circe" % "4.0.2",
-      "com.softwaremill.sttp.client4" %% "slf4j-backend" % "4.0.2",
+      "com.comcast" %% "ip4s-core" % "3.7.0",
+      "com.softwaremill.sttp.client4" %% "cats" % "4.0.5",
+      "com.softwaremill.sttp.client4" %% "circe" % "4.0.5",
+      "com.softwaremill.sttp.client4" %% "slf4j-backend" % "4.0.5",
       "dev.langchain4j" % "langchain4j" % "1.0.0-beta3",
       "dev.langchain4j" % "langchain4j-ollama" % "1.0.0-beta3",
     ),
@@ -126,10 +126,12 @@ lazy val `report-indexing` = project
   .configure(usingCatsEffect)
   .settings(
     libraryDependencies ++= Seq(
+      "co.fs2" %% "fs2-io" % "3.12.0",
       "com.lihaoyi" %% "os-lib" % "0.11.4",
       "dev.langchain4j" % "langchain4j" % "1.0.0-beta3",
       "dev.langchain4j" % "langchain4j-document-parser-apache-pdfbox" % "1.0.0-beta3",
       "dev.langchain4j" % "langchain4j-ollama" % "1.0.0-beta3",
+      "org.gnieh" %% "fs2-data-json-circe" % "1.11.3",
       "org.scala-lang.modules" %% "scala-parallel-collections" % "1.2.0",
     ),
   )

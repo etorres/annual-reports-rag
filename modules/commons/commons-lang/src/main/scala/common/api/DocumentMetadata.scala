@@ -3,6 +3,7 @@ package common.api
 
 enum DocumentMetadata(val name: String):
   case Chunk extends DocumentMetadata("Chunk")
+  case CompanyName extends DocumentMetadata("CompanyName")
   case Filename extends DocumentMetadata("Filename")
   case Page extends DocumentMetadata("Page")
   case Sha1FileChecksum extends DocumentMetadata("Sha1FileChecksum")
@@ -10,6 +11,7 @@ enum DocumentMetadata(val name: String):
 
 object DocumentMetadata:
   val editionFields: List[DocumentMetadata] = List(
+    DocumentMetadata.CompanyName,
     DocumentMetadata.Filename,
     DocumentMetadata.Sha1FileChecksum,
     DocumentMetadata.Title,

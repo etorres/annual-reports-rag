@@ -16,6 +16,7 @@ object JsonDataListExtensions:
             case None =>
               Left(IllegalArgumentException(s"The value in column $columnName is not integer"))
 
+    @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
     def textFrom(columns: List[Column], columnName: String): Either[Throwable, String] =
       columns.zipWithIndex
         .find:

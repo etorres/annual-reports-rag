@@ -2,7 +2,7 @@ package es.eriktorr
 package report
 
 import embedding.db.{ElasticClient, VectorStoreBuilder}
-import report.api.ReportLoader
+import report.api.{ReportInfoLoader, ReportLoader}
 import report.application.ReportLoaderConfig
 import report.domain.ReportLoaderService
 
@@ -14,13 +14,15 @@ object Main extends IOApp:
   override def run(args: List[String]): IO[ExitCode] =
     val reportsPath = os.pwd / "modules" / "reports"
     val samplePath = reportsPath / "sample-reports" / "src" / "main" / "resources" / "samples"
+    val subsetPath = samplePath / "subset.json"
     val config = ReportLoaderConfig.localContainer
     (for
       logger <- Resource.eval(Slf4jLogger.create[IO])
       given Logger[IO] = logger
       elasticClient <- ElasticClient.resource(config.elasticConfig)
       vectorStoreBuilder = VectorStoreBuilder(elasticClient)
-      reportLoader = ReportLoader(vectorStoreBuilder)
+      reportInfoLoader = ReportInfoLoader(subsetPath)
+      reportLoader = ReportLoader(reportInfoLoader, vectorStoreBuilder)
       reportLoaderService = ReportLoaderService(reportLoader)
     yield (logger, reportLoaderService)).use:
       case (logger, reportLoaderService) =>

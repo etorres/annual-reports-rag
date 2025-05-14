@@ -9,7 +9,7 @@ services:
       - ./ollama:/root/.ollama
 
   elasticsearch:
-    image: elasticsearch:8.17.4
+    image: elasticsearch:8.17.6
     hostname: elastic.test
     container_name: elastic.test
     ports:

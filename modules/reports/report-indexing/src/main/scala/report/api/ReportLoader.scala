@@ -15,6 +15,7 @@ import org.apache.commons.io.FilenameUtils
 import org.typelevel.log4cats.Logger
 
 final class ReportLoader(
+    reportInfoLoader: ReportInfoLoader,
     vectorStoreBuilder: VectorStoreBuilder,
 )(using logger: Logger[IO]):
   def loadReportsFrom(dir: os.Path): IO[Int] =
@@ -31,9 +32,12 @@ final class ReportLoader(
 
   private def loadDocument(path: os.Path) =
     for
-      document <- PdfDocument.loadDocument(path)
       fileChecksum <- MessageDigest.checksum(path)
-      enrichedDocument = ReportTransformer.transform(document, fileChecksum)
+      reportInfo <- reportInfoLoader
+        .findReportInfoBy(fileChecksum, simple = true)
+        .getOrRaise(IllegalArgumentException(s"No report info found for: $path"))
+      document <- PdfDocument.loadDocument(path)
+      enrichedDocument = ReportTransformer.transform(document, reportInfo)
     yield enrichedDocument
 
   private def loadPages(path: os.Path, document: Document) =

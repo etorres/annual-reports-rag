@@ -9,11 +9,12 @@ import dev.langchain4j.data.document.Document
 import scala.annotation.tailrec
 
 object ReportTransformer:
-  def transform(document: Document, fileChecksum: String): Document =
+  def transform(document: Document, reportInfo: ReportInfo): Document =
     val filename = document.metadataAsString("file_name")
     document
+      .put(DocumentMetadata.CompanyName, reportInfo.companyName)
       .put(DocumentMetadata.Filename, filename)
-      .put(DocumentMetadata.Sha1FileChecksum, fileChecksum)
+      .put(DocumentMetadata.Sha1FileChecksum, reportInfo.sha1)
 
   def transform(page: Document, pageNum: Int, parent: Document): Document =
     @tailrec
