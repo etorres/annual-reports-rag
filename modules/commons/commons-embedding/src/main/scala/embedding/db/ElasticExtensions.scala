@@ -11,8 +11,15 @@ object ElasticExtensions:
   extension (self: IO[(List[Column], List[List[JsonData]])])
     def unique: IO[(List[Column], List[JsonData])] =
       self.flatMap: items =>
-        val lifted = Arrow[Function1].split(
-          (columns: List[Column]) => Some(columns),
-          (rows: List[List[JsonData]]) => rows.headOption,
-        )
-        IO.fromOption(lifted(items).tupled)(IllegalArgumentException("Expected exactly one result"))
+        IO.fromOption(
+          exactlyOneRow(items).tupled,
+        )(IllegalArgumentException("Expected exactly one result"))
+
+  private lazy val exactlyOneRow =
+    Arrow[Function1].split(
+      (columns: List[Column]) => Some(columns),
+      (rows: List[List[JsonData]]) =>
+        rows match
+          case head :: Nil => Some(head)
+          case _ => None,
+    )
