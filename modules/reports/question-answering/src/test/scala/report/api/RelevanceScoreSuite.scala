@@ -3,7 +3,10 @@ package report.api
 
 import report.api.RelevanceScoreSuite.*
 
+import cats.effect.IO
 import munit.CatsEffectSuite
+import org.typelevel.log4cats.Logger
+import org.typelevel.log4cats.noop.NoOpLogger
 
 final class RelevanceScoreSuite extends CatsEffectSuite:
   test("should extract the relevance score from a given text (1)"):
@@ -25,6 +28,7 @@ final class RelevanceScoreSuite extends CatsEffectSuite:
     testWith(testCase6)
 
   private def testWith(testCase: TestCase) =
+    given Logger[IO] = NoOpLogger.impl[IO]
     RelevanceScore
       .from(testCase.text)
       .assertEquals(testCase.score)

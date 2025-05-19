@@ -1,13 +1,12 @@
 package es.eriktorr
 package report.domain
 
-import embedding.db.{Question, VectorResult, VectorStoreRouter}
+import embedding.db.{ChunkSet, Question, VectorStoreRouter}
 import report.api.{PageRebuilding, RankedPage, Ranking}
 import report.application.QuestionAnsweringConfig
 
-import cats.data.NonEmptyList
 import cats.effect.IO
-import cats.implicits.{catsSyntaxParallelFlatTraverse1, showInterpolator}
+import cats.implicits.showInterpolator
 
 final class ContentRetrieverService(
     config: QuestionAnsweringConfig,
@@ -16,16 +15,18 @@ final class ContentRetrieverService(
 ):
   def relevantContextFor(companyName: String, question: String): IO[String] =
     for
-      topNVectorResults <- topNRelevantChunks(
+      topNRelevantChunks <- topNRelevantChunks(
         config.topN,
         companyName,
         question,
         vectorStoreRouter,
       )
-      pages <- pagesFrom(topNVectorResults, vectorStoreRouter)
-      rankedPages <- ranking.rank(pages, question, topNVectorResults)
+      pages <- pagesFrom(topNRelevantChunks, vectorStoreRouter)
+      rankedPages <- ranking.rank(topNRelevantChunks, pages, question)
       _ = // TODO
-        topNVectorResults.foreach(x => println(s" >> TOP_N: ${x.index}, page: ${x.page}"))
+        topNRelevantChunks.chunks.toList.foreach(x =>
+          println(s" >> TOP_N: ${topNRelevantChunks.index}, page: ${x.page}"),
+        )
         pages.foreach(x => println(s" >> PAGE: ${x.filename}, ${x.page}"))
         rankedPages.foreach(x => println(show" >> PAGE: $x"))
       relevantContext = merge(rankedPages, 10)
@@ -40,22 +41,18 @@ final class ContentRetrieverService(
           val mergedPages = pages
             .sortBy(_.page.page)
             .map: page =>
-              s"**Page: ${page.page.page}**\n\n${page.page.text}"
+              s"\n**Page: ${page.page.page}**\n\n${page.page.text}"
             .mkString("\n")
-          s"**Filename: $filename**\n\n$mergedPages"
+          s"**Filename: $filename**\n$mergedPages"
       .toList
       .mkString("\n")
 
-  private def pagesFrom(vectorResults: List[VectorResult], vectorStoreRouter: VectorStoreRouter) =
+  private def pagesFrom(chunkSet: ChunkSet, vectorStoreRouter: VectorStoreRouter) =
     for
-      documentResults <- vectorResults
-        .groupBy(_.index)
-        .view
-        .mapValues(_.map(_.page).distinct)
-        .toList
-        .parFlatTraverse:
-          case (index, pages) =>
-            vectorStoreRouter.findBy(index, NonEmptyList.fromListUnsafe(pages))
+      documentResults <- vectorStoreRouter.findBy(
+        chunkSet.index,
+        chunkSet.chunks.map(_.page).distinct,
+      )
       pages = PageRebuilding.rebuild(documentResults)
     yield pages
 
@@ -66,6 +63,10 @@ final class ContentRetrieverService(
       vectorStoreRouter: VectorStoreRouter,
   ) =
     for
-      vectorResults <- vectorStoreRouter.bestMatchFor(Question(companyName, question), n)
-      topNVectorResults = vectorResults.sortBy(_.score).reverse.take(n)
-    yield topNVectorResults
+      wrappedQuestion = Question(companyName, question)
+      topNRelevantChunks <- vectorStoreRouter
+        .topNRelevantChunks(n, wrappedQuestion)
+        .getOrRaise(
+          IllegalArgumentException(show"No relevant chunks found for question: $wrappedQuestion"),
+        )
+    yield topNRelevantChunks

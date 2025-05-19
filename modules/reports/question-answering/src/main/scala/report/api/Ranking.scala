@@ -1,7 +1,7 @@
 package es.eriktorr
 package report.api
 
-import embedding.db.VectorResult
+import embedding.db.ChunkSet
 import ollama.api.OllamaChatModelBuilderExtensions.responseFormat
 import ollama.application.OllamaConfig
 
@@ -17,9 +17,9 @@ import java.time.Duration as JDuration
 
 trait Ranking:
   def rank(
+      chunkSet: ChunkSet,
       pages: List[Page],
       question: String,
-      vectorResults: List[VectorResult],
   ): IO[List[RankedPage]]
 
 object Ranking:
@@ -40,15 +40,15 @@ object Ranking:
       .build()
     val assistant = AiServices
       .builder(classOf[Assistant])
-      .chatLanguageModel(chatModel)
       .chatMemoryProvider((sessionId: Any) =>
         MessageWindowChatMemory.builder().id(sessionId).maxMessages(10).build(),
       )
+      .chatModel(chatModel)
       .build()
     def chat(sessionId: Int, message: String) =
       IO.blocking:
         assistant.chat(sessionId, message)
-    (pages: List[Page], question: String, vectorResults: List[VectorResult]) =>
+    (chunkSet: ChunkSet, pages: List[Page], question: String) =>
       pages.zipWithIndex.parTraverseN(1):
         case (page, idx) =>
           for
@@ -68,9 +68,8 @@ object Ranking:
             )
             relevanceScore <- RelevanceScore.from(response)
             maxVectorScore = NonEmptyList.fromList:
-              vectorResults
-                .filter: vectorResult =>
-                  vectorResult.filename == page.filename && vectorResult.page == page.page
+              chunkSet.chunks.filter: chunk =>
+                chunkSet.filename == page.filename && chunk.page == page.page
             match
               case Some(value) => value.sortBy(_.score).last.score
               case None => 0d

@@ -154,13 +154,14 @@
         <parameter value="21" />
         <parameter value="-Wsafe-init" />
         <parameter value="-Yexplicit-nulls" />
+        <parameter value="-preview" />
         <parameter value="-Xfatal-warnings" />
         <parameter value="-Xsemanticdb" />
         <parameter value="-semanticdb-target" />
-        <parameter value="$PROJECT_DIR$/modules/reports/sample-reports/target/scala-3.6.4/test-meta" />
+        <parameter value="$PROJECT_DIR$/modules/reports/sample-reports/target/scala-3.7.0/test-meta" />
       </parameters>
       <plugins>
-        <plugin path="$PROJECT_DIR$/target/scala-3.6.4/compiler_plugins/wartremover_3.6.4-3.3.1.jar" />
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
       </plugins>
     </profile>
     <profile name="sbt 15" modules="annual-reports-rag.sample-reports.main">
@@ -186,13 +187,14 @@
         <parameter value="21" />
         <parameter value="-Wsafe-init" />
         <parameter value="-Yexplicit-nulls" />
+        <parameter value="-preview" />
         <parameter value="-Xfatal-warnings" />
         <parameter value="-Xsemanticdb" />
         <parameter value="-semanticdb-target" />
-        <parameter value="$PROJECT_DIR$/modules/reports/sample-reports/target/scala-3.6.4/meta" />
+        <parameter value="$PROJECT_DIR$/modules/reports/sample-reports/target/scala-3.7.0/meta" />
       </parameters>
       <plugins>
-        <plugin path="$PROJECT_DIR$/target/scala-3.6.4/compiler_plugins/wartremover_3.6.4-3.3.1.jar" />
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
       </plugins>
     </profile>
     <profile name="sbt 16" modules="annual-reports-rag.report-indexing.test">
@@ -218,13 +220,14 @@
         <parameter value="21" />
         <parameter value="-Wsafe-init" />
         <parameter value="-Yexplicit-nulls" />
+        <parameter value="-preview" />
         <parameter value="-Xfatal-warnings" />
         <parameter value="-Xsemanticdb" />
         <parameter value="-semanticdb-target" />
-        <parameter value="$PROJECT_DIR$/modules/reports/report-indexing/target/scala-3.6.4/test-meta" />
+        <parameter value="$PROJECT_DIR$/modules/reports/report-indexing/target/scala-3.7.0/test-meta" />
       </parameters>
       <plugins>
-        <plugin path="$PROJECT_DIR$/target/scala-3.6.4/compiler_plugins/wartremover_3.6.4-3.3.1.jar" />
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
       </plugins>
     </profile>
     <profile name="sbt 17" modules="annual-reports-rag.report-indexing.main">
@@ -250,13 +253,14 @@
         <parameter value="21" />
         <parameter value="-Wsafe-init" />
         <parameter value="-Yexplicit-nulls" />
+        <parameter value="-preview" />
         <parameter value="-Xfatal-warnings" />
         <parameter value="-Xsemanticdb" />
         <parameter value="-semanticdb-target" />
-        <parameter value="$PROJECT_DIR$/modules/reports/report-indexing/target/scala-3.6.4/meta" />
+        <parameter value="$PROJECT_DIR$/modules/reports/report-indexing/target/scala-3.7.0/meta" />
       </parameters>
       <plugins>
-        <plugin path="$PROJECT_DIR$/target/scala-3.6.4/compiler_plugins/wartremover_3.6.4-3.3.1.jar" />
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
       </plugins>
     </profile>
     <profile name="sbt 18" modules="annual-reports-rag.commons-embeddings.test">
@@ -345,10 +349,10 @@
         <parameter value="-Xfatal-warnings" />
         <parameter value="-Xsemanticdb" />
         <parameter value="-semanticdb-target" />
-        <parameter value="$PROJECT_DIR$/target/scala-3.6.4/test-meta" />
+        <parameter value="$PROJECT_DIR$/target/scala-3.7.0/test-meta" />
       </parameters>
       <plugins>
-        <plugin path="$PROJECT_DIR$/target/scala-3.6.4/compiler_plugins/wartremover_3.6.4-3.3.1.jar" />
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
       </plugins>
     </profile>
     <profile name="sbt 20" modules="annual-reports-rag.commons-embedding.test">
@@ -374,13 +378,14 @@
         <parameter value="21" />
         <parameter value="-Wsafe-init" />
         <parameter value="-Yexplicit-nulls" />
+        <parameter value="-preview" />
         <parameter value="-Xfatal-warnings" />
         <parameter value="-Xsemanticdb" />
         <parameter value="-semanticdb-target" />
-        <parameter value="$PROJECT_DIR$/modules/commons/commons-embedding/target/scala-3.6.4/test-meta" />
+        <parameter value="$PROJECT_DIR$/modules/commons/commons-embedding/target/scala-3.7.0/test-meta" />
       </parameters>
       <plugins>
-        <plugin path="$PROJECT_DIR$/target/scala-3.6.4/compiler_plugins/wartremover_3.6.4-3.3.1.jar" />
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
       </plugins>
     </profile>
     <profile name="sbt 21" modules="annual-reports-rag.commons-embedding.main">
@@ -406,13 +411,14 @@
         <parameter value="21" />
         <parameter value="-Wsafe-init" />
         <parameter value="-Yexplicit-nulls" />
+        <parameter value="-preview" />
         <parameter value="-Xfatal-warnings" />
         <parameter value="-Xsemanticdb" />
         <parameter value="-semanticdb-target" />
-        <parameter value="$PROJECT_DIR$/modules/commons/commons-embedding/target/scala-3.6.4/meta" />
+        <parameter value="$PROJECT_DIR$/modules/commons/commons-embedding/target/scala-3.7.0/meta" />
       </parameters>
       <plugins>
-        <plugin path="$PROJECT_DIR$/target/scala-3.6.4/compiler_plugins/wartremover_3.6.4-3.3.1.jar" />
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
       </plugins>
     </profile>
     <profile name="sbt 22" modules="annual-reports-rag.question-answering.test">
@@ -438,13 +444,14 @@
         <parameter value="21" />
         <parameter value="-Wsafe-init" />
         <parameter value="-Yexplicit-nulls" />
+        <parameter value="-preview" />
         <parameter value="-Xfatal-warnings" />
         <parameter value="-Xsemanticdb" />
         <parameter value="-semanticdb-target" />
-        <parameter value="$PROJECT_DIR$/modules/reports/question-answering/target/scala-3.6.4/test-meta" />
+        <parameter value="$PROJECT_DIR$/modules/reports/question-answering/target/scala-3.7.0/test-meta" />
       </parameters>
       <plugins>
-        <plugin path="$PROJECT_DIR$/target/scala-3.6.4/compiler_plugins/wartremover_3.6.4-3.3.1.jar" />
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
       </plugins>
     </profile>
     <profile name="sbt 23" modules="annual-reports-rag.question-answering.main">
@@ -470,13 +477,14 @@
         <parameter value="21" />
         <parameter value="-Wsafe-init" />
         <parameter value="-Yexplicit-nulls" />
+        <parameter value="-preview" />
         <parameter value="-Xfatal-warnings" />
         <parameter value="-Xsemanticdb" />
         <parameter value="-semanticdb-target" />
-        <parameter value="$PROJECT_DIR$/modules/reports/question-answering/target/scala-3.6.4/meta" />
+        <parameter value="$PROJECT_DIR$/modules/reports/question-answering/target/scala-3.7.0/meta" />
       </parameters>
       <plugins>
-        <plugin path="$PROJECT_DIR$/target/scala-3.6.4/compiler_plugins/wartremover_3.6.4-3.3.1.jar" />
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
       </plugins>
     </profile>
     <profile name="sbt 24" modules="annual-reports-rag.commons-ollama.test">
@@ -502,13 +510,14 @@
         <parameter value="21" />
         <parameter value="-Wsafe-init" />
         <parameter value="-Yexplicit-nulls" />
+        <parameter value="-preview" />
         <parameter value="-Xfatal-warnings" />
         <parameter value="-Xsemanticdb" />
         <parameter value="-semanticdb-target" />
-        <parameter value="$PROJECT_DIR$/modules/commons/commons-ollama/target/scala-3.6.4/test-meta" />
+        <parameter value="$PROJECT_DIR$/modules/commons/commons-ollama/target/scala-3.7.0/test-meta" />
       </parameters>
       <plugins>
-        <plugin path="$PROJECT_DIR$/target/scala-3.6.4/compiler_plugins/wartremover_3.6.4-3.3.1.jar" />
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
       </plugins>
     </profile>
     <profile name="sbt 25" modules="annual-reports-rag.commons-ollama.main">
@@ -534,13 +543,14 @@
         <parameter value="21" />
         <parameter value="-Wsafe-init" />
         <parameter value="-Yexplicit-nulls" />
+        <parameter value="-preview" />
         <parameter value="-Xfatal-warnings" />
         <parameter value="-Xsemanticdb" />
         <parameter value="-semanticdb-target" />
-        <parameter value="$PROJECT_DIR$/modules/commons/commons-ollama/target/scala-3.6.4/meta" />
+        <parameter value="$PROJECT_DIR$/modules/commons/commons-ollama/target/scala-3.7.0/meta" />
       </parameters>
       <plugins>
-        <plugin path="$PROJECT_DIR$/target/scala-3.6.4/compiler_plugins/wartremover_3.6.4-3.3.1.jar" />
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
       </plugins>
     </profile>
     <profile name="sbt 3" modules="annual-reports-rag.main">
@@ -565,10 +575,10 @@
         <parameter value="-Xfatal-warnings" />
         <parameter value="-Xsemanticdb" />
         <parameter value="-semanticdb-target" />
-        <parameter value="$PROJECT_DIR$/target/scala-3.6.4/meta" />
+        <parameter value="$PROJECT_DIR$/target/scala-3.7.0/meta" />
       </parameters>
       <plugins>
-        <plugin path="$PROJECT_DIR$/target/scala-3.6.4/compiler_plugins/wartremover_3.6.4-3.3.1.jar" />
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
       </plugins>
     </profile>
     <profile name="sbt 4" modules="annual-reports-rag.commons-lang.test">
@@ -594,13 +604,14 @@
         <parameter value="21" />
         <parameter value="-Wsafe-init" />
         <parameter value="-Yexplicit-nulls" />
+        <parameter value="-preview" />
         <parameter value="-Xfatal-warnings" />
         <parameter value="-Xsemanticdb" />
         <parameter value="-semanticdb-target" />
-        <parameter value="$PROJECT_DIR$/modules/commons/commons-lang/target/scala-3.6.4/test-meta" />
+        <parameter value="$PROJECT_DIR$/modules/commons/commons-lang/target/scala-3.7.0/test-meta" />
       </parameters>
       <plugins>
-        <plugin path="$PROJECT_DIR$/target/scala-3.6.4/compiler_plugins/wartremover_3.6.4-3.3.1.jar" />
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
       </plugins>
     </profile>
     <profile name="sbt 5" modules="annual-reports-rag.commons-lang.main">
@@ -626,13 +637,14 @@
         <parameter value="21" />
         <parameter value="-Wsafe-init" />
         <parameter value="-Yexplicit-nulls" />
+        <parameter value="-preview" />
         <parameter value="-Xfatal-warnings" />
         <parameter value="-Xsemanticdb" />
         <parameter value="-semanticdb-target" />
-        <parameter value="$PROJECT_DIR$/modules/commons/commons-lang/target/scala-3.6.4/meta" />
+        <parameter value="$PROJECT_DIR$/modules/commons/commons-lang/target/scala-3.7.0/meta" />
       </parameters>
       <plugins>
-        <plugin path="$PROJECT_DIR$/target/scala-3.6.4/compiler_plugins/wartremover_3.6.4-3.3.1.jar" />
+        <plugin path="$PROJECT_DIR$/target/scala-3.7.0/compiler_plugins/wartremover_3.7.0-3.3.4.jar" />
       </plugins>
     </profile>
     <profile name="sbt 6" modules="annual-reports-rag.data-ingestion.test">
